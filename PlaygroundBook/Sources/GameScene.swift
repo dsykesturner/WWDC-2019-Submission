@@ -13,20 +13,27 @@ class GameScene: SKScene {
     
     
     override func didMove(to view: SKView) {
-//        addBackground()
+        addBackground()
 //        addGem()
         addEmitter()
         
-        view.backgroundColor = UIColor.black
     }
     
     
-//    func addBackground() {
-//        let backdrop = SKSpriteNode(imageNamed: Background.water)
-//        addChild(backdrop)
-//        backdrop.position = CGPoint(x: size.width / 2, y: size.height / 2)
-//        backdrop.zPosition = Layers.background
-//    }
+    func addBackground() {
+        let backdrop = SKSpriteNode(imageNamed: "City-PoorAirQuality")
+        backdrop.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        backdrop.zPosition = Layers.background
+        addChild(backdrop)
+        
+//        let screenFilter = SKSpriteNode(color: UIColor.black, size: backdrop.size)
+//        screenFilter.position = backdrop.position
+//        screenFilter.alpha = 0.8
+//        backdrop.zPosition = Layers.filter
+//        addChild(screenFilter)
+        
+        view!.backgroundColor = UIColor.init(red: 48.0/255.0, green: 43.0/255.0, blue: 42.0/255.0, alpha: 1)
+    }
     
     
 //    func addGem() {
@@ -39,9 +46,9 @@ class GameScene: SKScene {
     
     func addEmitter() {
         let emitter = SKEmitterNode(fileNamed: "Fumes")!
-        emitter.zPosition = 1
+        emitter.zPosition = Layers.emitter
         emitter.position = CGPoint(x: view!.frame.size.width / 2, y: 0)
-//        emitter.advanceSimulationTime(30)
+        emitter.advanceSimulationTime(30)
         addChild(emitter)
     }
     

@@ -10,5 +10,5 @@ import PlaygroundSupport
 
 // Instantiate a new instance of the live view from the book's auxiliary sources and pass it to PlaygroundSupport.
 let initialView = instantiateLiveView() as! LiveViewController
-initialView.stage = "Step2"
+initialView.setupWith(AirQuality.low, waterQuality: WaterQuality.low)
 PlaygroundPage.current.liveView = initialView

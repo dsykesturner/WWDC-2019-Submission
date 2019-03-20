@@ -14,7 +14,8 @@ import SpriteKit
 public class LiveViewController: UIViewController, PlaygroundLiveViewMessageHandler, PlaygroundLiveViewSafeAreaContainer {
     
     var skView:SKView!
-    public var stage:String?
+    public var airQuality: AirQuality!
+    public var waterQuality: WaterQuality!
     
     public func liveViewMessageConnectionOpened() {
         // Implement this method to be notified when the live view message connection is opened.
@@ -35,6 +36,17 @@ public class LiveViewController: UIViewController, PlaygroundLiveViewMessageHand
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        
+//        let scene = GameScene(size: view.frame.size)
+//        scene.scaleMode = .aspectFill
+//        skView = self.view as? SKView
+//        skView.presentScene(scene)
+        
+        /// NOTE: this deprecated item must be used for interface orientation due to a playground bug with device orientation
+//        self.interfaceOrientation
+    }
+    
+    public func setupWith(_ airQuality: String, waterQuality: String) {
         
         let scene = GameScene(size: view.frame.size)
         scene.scaleMode = .aspectFill

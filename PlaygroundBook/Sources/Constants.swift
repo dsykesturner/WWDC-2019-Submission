@@ -7,14 +7,20 @@
 
 import UIKit
 
-struct AirQuality {
-    static let low: CGFloat = 0
-    static let medium: CGFloat = 0
-    static let high: CGFloat = 0
+public struct AirQuality {
+    public static let low: String      = "low"
+    public static let medium: String   = "medium"
+    public static let high: String     = "high"
 }
 
-struct WaterQuality {
-    static let low: CGFloat = 0
-    static let medium: CGFloat = 0
-    static let high: CGFloat = 0
+public struct WaterQuality {
+    public static let low: String      = "low"
+    public static let medium: String   = "medium"
+    public static let high: String     = "high"
+}
+
+struct Layers {
+    static let emitter: CGFloat     = 1
+    static let background: CGFloat  = 2
+    static let filter: CGFloat      = 3
 }
