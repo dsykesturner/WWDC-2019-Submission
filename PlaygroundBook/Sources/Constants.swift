@@ -22,5 +22,5 @@ public struct WaterQuality {
 struct Layers {
     static let emitter: CGFloat     = 1
     static let background: CGFloat  = 2
-    static let filter: CGFloat      = 3
+    static let sprite: CGFloat     = 3
 }

@@ -21,6 +21,9 @@
 		5EF2F9B72054E6FB00191409 /* Chapters in Copy Book Contents */ = {isa = PBXBuildFile; fileRef = 5EF2F9B62054E6F900191409 /* Chapters */; };
 		5EF2F9B82054E6FE00191409 /* Sources in Copy Book Contents */ = {isa = PBXBuildFile; fileRef = 5EF2F9A52054BBB200191409 /* Sources */; };
 		6598BAF62243B7C4009B4058 /* Sun.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6598BAF52243B7C4009B4058 /* Sun.sks */; };
+		6598BAF72243C1CD009B4058 /* Fumes.sks in Resources */ = {isa = PBXBuildFile; fileRef = 65DDBBB7224259AF00128842 /* Fumes.sks */; };
+		6598BAF82243C1CF009B4058 /* Sun.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6598BAF52243B7C4009B4058 /* Sun.sks */; };
+		6598BAF92243C1F9009B4058 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65DDBBB8224259AF00128842 /* Assets.xcassets */; };
 		65DDBBB4224257D600128842 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DDBBB3224257D600128842 /* GameScene.swift */; };
 		65DDBBB6224258B400128842 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DDBBB5224258B400128842 /* Constants.swift */; };
 		65DDBBB9224259AF00128842 /* Fumes.sks in Resources */ = {isa = PBXBuildFile; fileRef = 65DDBBB7224259AF00128842 /* Fumes.sks */; };
@@ -387,6 +390,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6598BAF82243C1CF009B4058 /* Sun.sks in Resources */,
+				6598BAF72243C1CD009B4058 /* Fumes.sks in Resources */,
+				6598BAF92243C1F9009B4058 /* Assets.xcassets in Resources */,
 				5EA2E3CA2056F35B00416A35 /* LiveViewTestAppLaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
