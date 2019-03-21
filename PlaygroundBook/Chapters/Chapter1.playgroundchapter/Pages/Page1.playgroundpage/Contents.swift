@@ -5,6 +5,10 @@
 //  Abstract:
 //  The Swift file containing the source code edited by the user of this playground book.
 //
+
+import Foundation
+
+
 //#-end-hidden-code
 
 /*:
@@ -17,3 +21,6 @@
 
 let str = "Hello, playground"
 
+hill1.addTrainStation()
+hill2.addSolarPowerPlant()
+hill3.addForest()

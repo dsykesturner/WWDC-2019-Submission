@@ -16,12 +16,12 @@ class GameScene: SKScene {
         addBackground()
 //        addGem()
         addEmitter()
-        
+        addSun()
     }
     
     
     func addBackground() {
-        let backdrop = SKSpriteNode(imageNamed: "City-PoorAirQuality")
+        let backdrop = SKSpriteNode(imageNamed: "Hills+City")        
         backdrop.position = CGPoint(x: size.width / 2, y: size.height / 2)
         backdrop.zPosition = Layers.background
         addChild(backdrop)
@@ -35,6 +35,14 @@ class GameScene: SKScene {
         view!.backgroundColor = UIColor.init(red: 48.0/255.0, green: 43.0/255.0, blue: 42.0/255.0, alpha: 1)
     }
     
+    func addSun() {
+        // Idea: Only show this once the ipad has been exposed to light
+        let sunEmitter = SKEmitterNode(fileNamed: "Sun")!
+        sunEmitter.zPosition = Layers.emitter
+        sunEmitter.position = CGPoint(x: view!.frame.size.width / 11*3, y: view!.frame.size.height)
+        sunEmitter.advanceSimulationTime(30)
+        addChild(sunEmitter)
+    }
     
 //    func addGem() {
 //        addChild(gem)
@@ -45,11 +53,11 @@ class GameScene: SKScene {
     
     
     func addEmitter() {
-        let emitter = SKEmitterNode(fileNamed: "Fumes")!
-        emitter.zPosition = Layers.emitter
-        emitter.position = CGPoint(x: view!.frame.size.width / 2, y: 0)
-        emitter.advanceSimulationTime(30)
-        addChild(emitter)
+        let fumesEmitter = SKEmitterNode(fileNamed: "Fumes")!
+        fumesEmitter.zPosition = Layers.emitter
+        fumesEmitter.position = CGPoint(x: view!.frame.size.width / 2, y: 0)
+        fumesEmitter.advanceSimulationTime(30)
+        addChild(fumesEmitter)
     }
     
     

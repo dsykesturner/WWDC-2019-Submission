@@ -20,6 +20,7 @@
 		5EF2F9AE2054BBF300191409 /* LiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF2F9AD2054BBF300191409 /* LiveViewController.swift */; };
 		5EF2F9B72054E6FB00191409 /* Chapters in Copy Book Contents */ = {isa = PBXBuildFile; fileRef = 5EF2F9B62054E6F900191409 /* Chapters */; };
 		5EF2F9B82054E6FE00191409 /* Sources in Copy Book Contents */ = {isa = PBXBuildFile; fileRef = 5EF2F9A52054BBB200191409 /* Sources */; };
+		6598BAF62243B7C4009B4058 /* Sun.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6598BAF52243B7C4009B4058 /* Sun.sks */; };
 		65DDBBB4224257D600128842 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DDBBB3224257D600128842 /* GameScene.swift */; };
 		65DDBBB6224258B400128842 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DDBBB5224258B400128842 /* Constants.swift */; };
 		65DDBBB9224259AF00128842 /* Fumes.sks in Resources */ = {isa = PBXBuildFile; fileRef = 65DDBBB7224259AF00128842 /* Fumes.sks */; };
@@ -114,6 +115,7 @@
 		5EF2F9AB2054BBF300191409 /* libBook_Sources.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBook_Sources.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EF2F9AD2054BBF300191409 /* LiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewController.swift; sourceTree = "<group>"; };
 		5EF2F9B62054E6F900191409 /* Chapters */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Chapters; sourceTree = "<group>"; };
+		6598BAF52243B7C4009B4058 /* Sun.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Sun.sks; sourceTree = "<group>"; };
 		65DDBBB3224257D600128842 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		65DDBBB5224258B400128842 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		65DDBBB7224259AF00128842 /* Fumes.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Fumes.sks; sourceTree = "<group>"; };
@@ -241,6 +243,7 @@
 			children = (
 				5EF2F97E2054B6E400191409 /* ManifestPlist.strings */,
 				65DDBBB7224259AF00128842 /* Fumes.sks */,
+				6598BAF52243B7C4009B4058 /* Sun.sks */,
 				65DDBBB8224259AF00128842 /* Assets.xcassets */,
 				5E086DCC2051DDAE004D8D25 /* LiveView.storyboard */,
 			);
@@ -374,6 +377,7 @@
 			files = (
 				5EF2F97C2054B6E400191409 /* ManifestPlist.strings in Resources */,
 				65DDBBB9224259AF00128842 /* Fumes.sks in Resources */,
+				6598BAF62243B7C4009B4058 /* Sun.sks in Resources */,
 				65DDBBBA224259AF00128842 /* Assets.xcassets in Resources */,
 				5E086DCA2051DDAE004D8D25 /* LiveView.storyboard in Resources */,
 			);
