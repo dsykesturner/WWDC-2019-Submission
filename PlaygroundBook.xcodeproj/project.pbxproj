@@ -24,6 +24,8 @@
 		6598BAF72243C1CD009B4058 /* Fumes.sks in Resources */ = {isa = PBXBuildFile; fileRef = 65DDBBB7224259AF00128842 /* Fumes.sks */; };
 		6598BAF82243C1CF009B4058 /* Sun.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6598BAF52243B7C4009B4058 /* Sun.sks */; };
 		6598BAF92243C1F9009B4058 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 65DDBBB8224259AF00128842 /* Assets.xcassets */; };
+		6598BAFB22450D2D009B4058 /* WaterRipples.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6598BAFA22450D2D009B4058 /* WaterRipples.sks */; };
+		6598BAFC22450D2D009B4058 /* WaterRipples.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6598BAFA22450D2D009B4058 /* WaterRipples.sks */; };
 		65DDBBB4224257D600128842 /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DDBBB3224257D600128842 /* GameScene.swift */; };
 		65DDBBB6224258B400128842 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 65DDBBB5224258B400128842 /* Constants.swift */; };
 		65DDBBB9224259AF00128842 /* Fumes.sks in Resources */ = {isa = PBXBuildFile; fileRef = 65DDBBB7224259AF00128842 /* Fumes.sks */; };
@@ -119,6 +121,7 @@
 		5EF2F9AD2054BBF300191409 /* LiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewController.swift; sourceTree = "<group>"; };
 		5EF2F9B62054E6F900191409 /* Chapters */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Chapters; sourceTree = "<group>"; };
 		6598BAF52243B7C4009B4058 /* Sun.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Sun.sks; sourceTree = "<group>"; };
+		6598BAFA22450D2D009B4058 /* WaterRipples.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = WaterRipples.sks; sourceTree = "<group>"; };
 		65DDBBB3224257D600128842 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		65DDBBB5224258B400128842 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		65DDBBB7224259AF00128842 /* Fumes.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Fumes.sks; sourceTree = "<group>"; };
@@ -247,6 +250,7 @@
 				5EF2F97E2054B6E400191409 /* ManifestPlist.strings */,
 				65DDBBB7224259AF00128842 /* Fumes.sks */,
 				6598BAF52243B7C4009B4058 /* Sun.sks */,
+				6598BAFA22450D2D009B4058 /* WaterRipples.sks */,
 				65DDBBB8224259AF00128842 /* Assets.xcassets */,
 				5E086DCC2051DDAE004D8D25 /* LiveView.storyboard */,
 			);
@@ -383,6 +387,7 @@
 				6598BAF62243B7C4009B4058 /* Sun.sks in Resources */,
 				65DDBBBA224259AF00128842 /* Assets.xcassets in Resources */,
 				5E086DCA2051DDAE004D8D25 /* LiveView.storyboard in Resources */,
+				6598BAFB22450D2D009B4058 /* WaterRipples.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -390,6 +395,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6598BAFC22450D2D009B4058 /* WaterRipples.sks in Resources */,
 				6598BAF82243C1CF009B4058 /* Sun.sks in Resources */,
 				6598BAF72243C1CD009B4058 /* Fumes.sks in Resources */,
 				6598BAF92243C1F9009B4058 /* Assets.xcassets in Resources */,

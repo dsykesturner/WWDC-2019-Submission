@@ -7,14 +7,17 @@
 
 import SpriteKit
 import AVFoundation
+import CoreMotion
 
-class GameScene: SKScene {
+public class GameScene: SKScene {
     
+    public var orientation: UIInterfaceOrientation!
     // Sun
 //    var sunTimer:Timer?
+    var isSunOn:Bool = false
     var addingSolarPannels:Bool = false
-    var solarPanel:SKSpriteNode!
-    var solarPanelCopies:[SKSpriteNode] = []
+    var addingTrees:Bool = false 
+    var solarPanels:[SKSpriteNode] = []
     // Camera
     var session: AVCaptureSession?
     var captureInput: AVCaptureInput!
@@ -30,58 +33,46 @@ class GameScene: SKScene {
     var prevAveBrightness: Float = 0.0
     var prevAveBrightness2: Float = 0.0
     var calculateBrightnessTimer: Timer?
+    // River
+    let motion = CMMotionManager()
+    var seaBins:[SKSpriteNode] = []
+    var rubbish:[SKSpriteNode] = []
     
-    override func didMove(to view: SKView) {
-        addBackground()
-        addFumes()
-        addSun()
-        
-        setupSolarPower()
-        setupCamera()
-        startCamera()
+    override public func didMove(to view: SKView) {
+        super.didMove(to: view)
     }
     
     // MARK: - Scene Setup
     
-    func addBackground() {
+    public func setupDirtyCity() {
+        
+        addDirtyBackground()
+        addFumes()
+    }
+    
+    func addDirtyBackground() {
         let backdrop = SKSpriteNode(imageNamed: "Hills+City")        
         backdrop.position = CGPoint(x: size.width / 2, y: size.height / 2)
         backdrop.zPosition = Layers.background
         addChild(backdrop)
         
-//        let screenFilter = SKSpriteNode(color: UIColor.black, size: backdrop.size)
-//        screenFilter.position = backdrop.position
-//        screenFilter.alpha = 0.8
-//        backdrop.zPosition = Layers.filter
-//        addChild(screenFilter)
-        
         scene?.backgroundColor = UIColor.init(red: 188.0/255.0, green: 201.0/255.0, blue: 224.0/255.0, alpha: 1)
     }
     
-    func addSun() {
-        // Idea: Only show this once the ipad has been exposed to light
-        let sunEmitter = SKEmitterNode(fileNamed: "Sun")!
-        sunEmitter.zPosition = Layers.emitter
-        sunEmitter.position = CGPoint(x: view!.frame.size.width / 11*3, y: view!.frame.size.height)
-        sunEmitter.advanceSimulationTime(30)
-        addChild(sunEmitter)
+    func addCleanBackground() {
         
-//        sunTimer = Timer(fire: Date(), interval: 30, repeats: true, block: { (timer) in
-//
-//
-//            let endPoint = CGPoint(x: self.view!.frame.size.width, y: self.view!.frame.size.height)
-//            let action = SKAction.move(to: endPoint, duration: 120)
-//            sunEmitter.run(action)
-//        })
     }
     
-//    func addGem() {
-//        addChild(gem)
-//        gem.position = CGPoint(x: size.width / 2, y: size.height * 0.7)
-//        gem.zPosition = Layers.gem
-//        gem.setScale(2.5)
-//    }
-    
+    func addRiverBackground() {
+        
+        let rippleEmitter = SKEmitterNode(fileNamed: "WaterRipples")!
+        rippleEmitter.zPosition = Layers.emitter
+        rippleEmitter.position = CGPoint(x: 0, y: view!.frame.size.height / 2)
+        rippleEmitter.advanceSimulationTime(30)
+        addChild(rippleEmitter)
+        
+        scene?.backgroundColor = UIColor.init(red: 0/255.0, green: 141.0/255.0, blue: 255.0/255.0, alpha: 1)
+    }
     
     func addFumes() {
         let fumesEmitter = SKEmitterNode(fileNamed: "Fumes")!
@@ -93,12 +84,14 @@ class GameScene: SKScene {
     
     // MARK: - Interaction Handler
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+    override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let touchLocation = touch.location(in: self)
         
         if addingSolarPannels {
             addSolarPanel(location: touchLocation)
+        } else if addingTrees {
+            addTree(location: touchLocation)
         }
         
         
@@ -116,35 +109,170 @@ class GameScene: SKScene {
 //        gem.removeFromParent()
 //    }
     
+    // MARK: - River
+    
+    public func setupRiver() {
+    
+        addRiverBackground()
+        addSeaBins()
+        addRubbish()
+        setupRiverPhysics()
+        setupAccelerometer()
+    }
+   
+    func addSeaBins() {
+        
+        let size = CGSize(width: 100, height: 100)
+        let positions = [CGPoint(x: view!.frame.size.width/3, y: view!.frame.size.height/3*2),
+                         CGPoint(x: view!.frame.size.width/3*2, y: view!.frame.size.height/3)]
+        
+        for position in positions {
+            let seaBin = SKSpriteNode(imageNamed: "SeaBin3")
+            seaBin.position = position
+            seaBin.size = size
+            seaBin.zPosition = Layers.sprite
+            seaBin.zRotation = CGFloat.pi / CGFloat(arc4random() % 4 + 1)
+            seaBin.run(.repeatForever(.rotate(byAngle: CGFloat(Double.pi), duration: 6)))
+            
+            seaBin.physicsBody = SKPhysicsBody(circleOfRadius: size.width/2)
+            seaBin.physicsBody!.allowsRotation = false
+            seaBin.physicsBody!.categoryBitMask = CategoryBitMask.SeaBin
+            seaBin.physicsBody!.contactTestBitMask = CategoryBitMask.SeaBin
+            seaBin.physicsBody!.friction = 0.2
+            seaBin.physicsBody!.linearDamping = 0.2
+            seaBin.physicsBody!.restitution = 0.2
+            seaBin.physicsBody!.affectedByGravity = false
+            seaBin.physicsBody!.mass = CGFloat(Int.max)
+            
+            addChild(seaBin)
+            
+            seaBins.append(seaBin)
+        }
+    }
+    
+    func addRubbish() {
+        
+        let size = CGSize(width: 50, height: 50)
+        let positions = [CGPoint(x: view!.frame.size.width/4, y: view!.frame.size.height/4),
+                         CGPoint(x: view!.frame.size.width/4*2, y: view!.frame.size.height/4*2),
+                         CGPoint(x: view!.frame.size.width/4*3, y: view!.frame.size.height/4*3),
+                         CGPoint(x: view!.frame.size.width/4, y: view!.frame.size.height/4*2),
+                         CGPoint(x: view!.frame.size.width/4*2, y: view!.frame.size.height/4),
+                         CGPoint(x: view!.frame.size.width/4*3, y: view!.frame.size.height/4),
+                         CGPoint(x: view!.frame.size.width/4, y: view!.frame.size.height/4*3),
+                         CGPoint(x: view!.frame.size.width/4*2, y: view!.frame.size.height/4*3),
+                         CGPoint(x: view!.frame.size.width/4*3, y: view!.frame.size.height/4*2)]
+        
+        for position in positions {
+            let rubbishPiece = SKSpriteNode(imageNamed: "Rubbish")
+            rubbishPiece.position = position
+            rubbishPiece.size = size
+            rubbishPiece.zPosition = Layers.sprite
+            rubbishPiece.zRotation = CGFloat.pi / CGFloat(arc4random() % 4 + 1)
+            rubbishPiece.run(.repeatForever(.rotate(byAngle: CGFloat(Double.pi), duration: 4)))
+            
+            rubbishPiece.physicsBody = SKPhysicsBody(circleOfRadius: size.width/2)
+            rubbishPiece.physicsBody!.allowsRotation = false
+            rubbishPiece.physicsBody!.categoryBitMask = CategoryBitMask.Rubbish
+            rubbishPiece.physicsBody!.contactTestBitMask = CategoryBitMask.Rubbish
+            rubbishPiece.physicsBody!.friction = 0.2
+            rubbishPiece.physicsBody!.linearDamping = 0.2
+            rubbishPiece.physicsBody!.restitution = 0.2
+            
+            addChild(rubbishPiece)
+            
+            rubbish.append(rubbishPiece)
+        }
+    }
+    
+    func setupRiverPhysics() {
+        
+        physicsWorld.contactDelegate = self
+        physicsWorld.gravity = CGVector(dx: 1, dy: 1)
+        
+        // Create an invisible barrier around the scene to keep the ball inside
+        let sceneBound = SKPhysicsBody(edgeLoopFrom: frame)
+        sceneBound.friction = 0 // TODO: edit this
+        sceneBound.restitution = 0.2
+        physicsBody = sceneBound
+    }
+    
+    func setupAccelerometer() {
+        
+        motion.accelerometerUpdateInterval = 1.0/60.0
+        let queue = OperationQueue()
+        motion.startAccelerometerUpdates(to: queue) { (data, error) in
+            if let error = error {
+                print("Error encountered getting accelerometer data \(error)")
+            } else if let data = data {
+                DispatchQueue.main.async {
+                    if (self.orientation == .landscapeRight) {
+                        self.physicsWorld.gravity = CGVector(dx: -data.acceleration.y*10, dy: data.acceleration.x*10)
+                    } else if (self.orientation == .landscapeLeft) {
+                        self.physicsWorld.gravity = CGVector(dx: data.acceleration.y*10, dy: -data.acceleration.x*10)
+                    }  else if (self.orientation == .portrait) {
+                        self.physicsWorld.gravity = CGVector(dx: data.acceleration.x*10, dy: data.acceleration.y*10)
+                    } else if (self.orientation == .portraitUpsideDown) {
+                        self.physicsWorld.gravity = CGVector(dx: -data.acceleration.x*10, dy: -data.acceleration.y*10)
+                    }
+                }
+            }
+        }
+    }
+    
+    // MARK: - Trees
+    
+   public func setupTrees() {
+        addingTrees = true
+        addingSolarPannels = false
+    }
+    
+    func addTree(location: CGPoint) {
+        
+        let tree = SKSpriteNode(imageNamed: "Tree")
+        tree.position = location
+        tree.size = CGSize(width: 60, height: 50)
+        tree.zPosition = Layers.sprite
+        addChild(tree)
+    }
+    
     // MARK: - Solar Power
     
-    func setupSolarPower() {
-        solarPanel = SKSpriteNode(imageNamed: "SolarPanel-Off")
-        solarPanel.size = CGSize(width: 100, height: 100)
-        solarPanel.zPosition = Layers.sprite
-        
+    public func setupSolarPower() {
         addingSolarPannels = true
+        addingTrees = false
+        
+        setupCamera()
+        startCamera()
     }
     
     func addSolarPanel(location: CGPoint) {
         
-        let newSolarPanel = solarPanel.copy() as! SKSpriteNode
-        newSolarPanel.position = location
-        addChild(newSolarPanel)
+        let solarPanel = isSunOn ? SKSpriteNode(imageNamed: "SolarPanel-On") : SKSpriteNode(imageNamed: "SolarPanel-Off")
+        solarPanel.position = location
+        solarPanel.size = CGSize(width: 50, height: 50)
+        solarPanel.zPosition = Layers.sprite
+        addChild(solarPanel)
         
-        solarPanelCopies.append(newSolarPanel)
+        solarPanels.append(solarPanel)
     }
     
     func turnOnSolarPanels() {
         
-        for solarPanel in solarPanelCopies {
+        turnOnSun()
+        
+        for solarPanel in solarPanels {
             solarPanel.texture = SKTexture(imageNamed: "SolarPanel-On")
         }
-        
-        // Rebuild new panels as 'on'
-        solarPanel = SKSpriteNode(imageNamed: "SolarPanel-On")
-        solarPanel.size = CGSize(width: 100, height: 100)
-        solarPanel.zPosition = Layers.sprite
+    }
+    
+    func turnOnSun() {
+
+        let sunEmitter = SKEmitterNode(fileNamed: "Sun")!
+        sunEmitter.zPosition = Layers.emitter
+        sunEmitter.position = CGPoint(x: view!.frame.size.width / 3, y: view!.frame.size.height-100)
+//        sunEmitter.advanceSimulationTime(
+        addChild(sunEmitter)
     }
     
     func setupCamera() {
@@ -228,14 +356,11 @@ class GameScene: SKScene {
         session.stopRunning()
         calculateBrightnessTimer?.invalidate()
     }
-    
-    // MARK: - AVCaptureVideoDataOutputSampleBufferDelegate
 }
 
-// TODO: put this in the VC?
 extension GameScene: AVCaptureVideoDataOutputSampleBufferDelegate {
     
-    func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+    public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
         let metadataDict:CFDictionary = CMCopyDictionaryOfAttachments(allocator: nil, target: sampleBuffer, attachmentMode: kCMAttachmentMode_ShouldPropagate)!
         let metadata = NSDictionary(dictionary: metadataDict)
@@ -243,5 +368,27 @@ extension GameScene: AVCaptureVideoDataOutputSampleBufferDelegate {
         guard let brightnessNum = exifMetadata[kCGImagePropertyExifBrightnessValue] as? NSNumber else {return}
         
         brightness = brightnessNum.floatValue
+    }
+}
+
+extension GameScene: SKPhysicsContactDelegate {
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        // Executed if the ball makes contact with the block.
+        if contact.bodyA.categoryBitMask == CategoryBitMask.Rubbish && contact.bodyB.categoryBitMask == CategoryBitMask.Rubbish {
+            let rubbishA = contact.bodyA.node as! SKSpriteNode
+            let rubbishB = contact.bodyB.node as! SKSpriteNode
+            
+            // Turn the block gray if it hasn't been hit yet.
+//            if block.name == "Block" {
+//                block.color = SKColor.darkGray
+//                block.name = "HalfBlock"
+//            }
+//
+//                // Remove the block from the scene if it has already been hit.
+//            else {
+//                block.removeFromParent()
+//            }
+        }
     }
 }

@@ -13,6 +13,7 @@ import SpriteKit
 @objc(Book_Sources_LiveViewController)
 public class LiveViewController: UIViewController, PlaygroundLiveViewMessageHandler, PlaygroundLiveViewSafeAreaContainer {
     
+    public var scene:GameScene!
     var skView:SKView!
     public var airQuality: AirQuality!
     public var waterQuality: WaterQuality!
@@ -46,11 +47,40 @@ public class LiveViewController: UIViewController, PlaygroundLiveViewMessageHand
 //        self.interfaceOrientation
     }
     
+    public override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
+        updateSceneOrientation(orientation: toInterfaceOrientation)
+    }
+    
     public func setupWith(_ airQuality: String, waterQuality: String) {
         
-        let scene = GameScene(size: view.frame.size)
+        scene = GameScene(size: view.frame.size)
         scene.scaleMode = .aspectFill
         skView = self.view as? SKView
         skView.presentScene(scene)
+        
+        updateSceneOrientation(orientation: interfaceOrientation)
+    }
+    
+    public func enableBlank() {
+        scene.setupDirtyCity()
+    }
+    
+    public func enableSolarPanels() {
+        scene.setupDirtyCity()
+        scene.setupSolarPower()
+    }
+    
+    public func enableTrees() {
+        scene.setupDirtyCity()
+        scene.setupTrees()
+    }
+    
+    public func enableRiver() {
+        scene.setupRiver()
+    }
+    
+    func updateSceneOrientation(orientation: UIInterfaceOrientation) {
+        print("new orientation: \(orientation.rawValue)")
+        scene.orientation = orientation
     }
 }
