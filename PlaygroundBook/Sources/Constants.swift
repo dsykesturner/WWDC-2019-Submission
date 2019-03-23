@@ -29,3 +29,8 @@ struct CategoryBitMask {
     static let SeaBin: UInt32           = 0b1 << 0
     static let Rubbish: UInt32          = 0b1 << 1
 }
+
+public enum PowerSource: Int {
+    case coal
+    case solarPower
+}

@@ -36,6 +36,8 @@ public class GameScene: SKScene {
     let motion = CMMotionManager()
     var seaBins:[SKSpriteNode] = []
     var rubbish:[SKSpriteNode] = []
+    // View
+    var messageView: SKView!
     
     override public func didMove(to view: SKView) {
         super.didMove(to: view)

@@ -20,5 +20,7 @@
 	<array>
 		<string>Chapter1.playgroundchapter</string>
 	</array>
+	<key>UserModuleMode</key>
+	<string>Limited</string>
 </dict>
 </plist>

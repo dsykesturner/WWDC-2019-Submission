@@ -8,10 +8,12 @@
 import UIKit
 import PlaygroundSupport
 
+var currentLiveViewController: LiveViewController!
+
 /// Instantiates a new instance of a live view.
 ///
 /// By default, this loads an instance of `LiveViewController` from `LiveView.storyboard`.
-public func instantiateLiveView() -> PlaygroundLiveViewable {
+func instantiateLiveView() -> LiveViewController {
     let storyboard = UIStoryboard(name: "LiveView", bundle: nil)
 
     guard let viewController = storyboard.instantiateInitialViewController() else {
@@ -22,7 +24,13 @@ public func instantiateLiveView() -> PlaygroundLiveViewable {
         fatalError("LiveView.storyboard's initial scene is not a LiveViewController; please either update the storyboard or this function")
     }
     liveViewController.setupWith(AirQuality.low, waterQuality: WaterQuality.low)
-
+    
     return liveViewController
 }
 
+public var sharedLiveVC: LiveViewController {
+    get {
+        currentLiveViewController = instantiateLiveView()
+        return currentLiveViewController
+    }    
+}

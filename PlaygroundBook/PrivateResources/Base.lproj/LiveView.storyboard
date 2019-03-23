@@ -17,9 +17,80 @@
                     <view key="view" contentMode="scaleToFill" id="Rh2-0a-zph" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="vvE-Wl-20n">
+                                <rect key="frame" x="37.5" y="223.5" width="300" height="220"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vhl-3P-k8f">
+                                        <rect key="frame" x="16" y="22" width="268" height="26"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="26" id="mwz-Dp-5R5"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="26"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Message" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="GPC-4G-LvD">
+                                        <rect key="frame" x="16" y="56" width="268" height="90"/>
+                                        <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="21"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g4C-m8-ICS">
+                                        <rect key="frame" x="16" y="154" width="268" height="50"/>
+                                        <color key="backgroundColor" red="0.30840110780000002" green="0.5618229508" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="wGW-Lh-n7b"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="21"/>
+                                        <state key="normal" title="Continue">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="25"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="messageTapped" destination="fcD-sv-Xiz" eventType="touchUpInside" id="Psi-Rf-amm"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.85531012055837563" blue="0.82329668147872925" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstItem="GPC-4G-LvD" firstAttribute="leading" secondItem="vvE-Wl-20n" secondAttribute="leading" constant="16" id="1k1-Th-zTI"/>
+                                    <constraint firstItem="g4C-m8-ICS" firstAttribute="top" secondItem="GPC-4G-LvD" secondAttribute="bottom" constant="8" id="Oyg-Am-ZPM"/>
+                                    <constraint firstItem="vhl-3P-k8f" firstAttribute="top" secondItem="vvE-Wl-20n" secondAttribute="top" constant="22" id="PVp-eK-aqy"/>
+                                    <constraint firstItem="g4C-m8-ICS" firstAttribute="leading" secondItem="vvE-Wl-20n" secondAttribute="leading" constant="16" id="Q30-7h-ff3"/>
+                                    <constraint firstAttribute="width" constant="300" id="SfS-re-xix"/>
+                                    <constraint firstItem="vhl-3P-k8f" firstAttribute="leading" secondItem="vvE-Wl-20n" secondAttribute="leading" constant="16" id="Z20-pE-Hkc"/>
+                                    <constraint firstItem="vhl-3P-k8f" firstAttribute="centerX" secondItem="vvE-Wl-20n" secondAttribute="centerX" id="fU6-oE-9V1"/>
+                                    <constraint firstAttribute="trailing" secondItem="g4C-m8-ICS" secondAttribute="trailing" constant="16" id="jKe-vo-264"/>
+                                    <constraint firstAttribute="height" constant="220" id="n52-6N-TJc"/>
+                                    <constraint firstAttribute="trailing" secondItem="GPC-4G-LvD" secondAttribute="trailing" constant="16" id="nVD-tq-4HY"/>
+                                    <constraint firstAttribute="trailing" secondItem="vhl-3P-k8f" secondAttribute="trailing" constant="16" id="wq1-FJ-lRj"/>
+                                    <constraint firstItem="GPC-4G-LvD" firstAttribute="top" secondItem="vhl-3P-k8f" secondAttribute="bottom" constant="8" id="wuI-8q-Q7m"/>
+                                    <constraint firstAttribute="bottom" secondItem="g4C-m8-ICS" secondAttribute="bottom" constant="16" id="xbm-BR-bA5"/>
+                                </constraints>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="25"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                            </view>
+                        </subviews>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="vvE-Wl-20n" firstAttribute="centerX" secondItem="Rh2-0a-zph" secondAttribute="centerX" id="MaJ-ax-bwp"/>
+                            <constraint firstItem="vvE-Wl-20n" firstAttribute="centerY" secondItem="Rh2-0a-zph" secondAttribute="centerY" id="wlW-eZ-mRW"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="qaR-nP-dw0"/>
                     </view>
+                    <connections>
+                        <outlet property="messageLabel" destination="GPC-4G-LvD" id="4bB-fD-Toh"/>
+                        <outlet property="messageView" destination="vvE-Wl-20n" id="3YN-4f-p85"/>
+                        <outlet property="titleLabel" destination="vhl-3P-k8f" id="JOQ-kf-iqZ"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="uvi-wC-fap" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
