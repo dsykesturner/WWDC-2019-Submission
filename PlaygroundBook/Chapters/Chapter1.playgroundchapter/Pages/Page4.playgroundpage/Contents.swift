@@ -1,26 +1,16 @@
-//#-hidden-code
-//
-//  See LICENSE folder for this template’s licensing information.
-//
-//  Abstract:
-//  The Swift file containing the source code edited by the user of this playground book.
-//
-//#-end-hidden-code
-let str = "Hello, playground page 2"
-
-//: A rose is a rose is a rose
-
-// This is a normal comment
-
+//#-code-completion(everything, hide)
 /*:
- Roses are `UIColor.red`,
- Violets are 🔵,
- Swift Playgrounds are rad,
- and so are you!
- */
-
-/*
- This is
- a multiline
- normal comment
+ # Phase 3: Sea Bins
+ 
+ Sea bins clean up plastics and other harmful waste from the ocean. Surrounding waste flows into the bin while water is pumped out the bottom trapping any waste in a filter.
+ 
+ **Did you know:** Almost 9 million tons of plastic end up in the ocean every year. It's been estimated that 90% of all sea birds have eaten some kind of plastic.
+ 
+ # 🚮 ❤️ 🐢
+ 
+ ## Instructions
+  
+ 1. Tilt your device to move the waste
+ 2. Move all waste into the sea bins provided
+ 3. Keep an eye out for a turtle
  */

@@ -35,17 +35,17 @@ var city = City()
 //#-code-completion(everything, hide)
 //#-code-completion(identifier, show, city, powerSource, PowerSource, coal, solarPower)
 /*:
- # Step 2: Solar Panels
+ # Phase 2: Solar Panels
  
  The city needs power, so let's setup solar panels to use the sun's energy to our advantage.
  
- *Did you know:* If the entire world switched to renewable eneregy by 2050, $600 billion would be saved every year in health care costs due to the elimination of risks associated with non-renewable sources.
+ **Did you know:** If the entire world switched to renewable eneregy by 2050, $600 billion would be saved every year in health care costs due to the elimination of risks associated with non-renewable sources. What would you do with that money?
  
  # ☀️ ⚡️ 💡
  
  ## Instructions
  
- (Kind note: This step uses the camera to detect light sensitivity. Please tap "OK" when prompted)
+ _(Kind note: This step uses the camera to detect light sensitivity. Please tap "OK" when prompted)_
  
  1. Change the city's power source from `.coal` to `.solarPower`
  2. Tap "Run My Code" to build the solar panels

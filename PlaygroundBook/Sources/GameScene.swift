@@ -136,7 +136,8 @@ public class GameScene: SKScene {
             seaBin.physicsBody?.restitution = 0.2
             seaBin.physicsBody?.affectedByGravity = false
             seaBin.physicsBody?.isDynamic = true
-            seaBin.physicsBody?.mass = CGFloat(Int.max)
+//            seaBin.physicsBody?.mass = CGFloat(Int.max)
+            seaBin.physicsBody?.pinned = true
             
             addChild(seaBin)
             
@@ -169,9 +170,10 @@ public class GameScene: SKScene {
             rubbishPiece.physicsBody?.allowsRotation = true
             rubbishPiece.physicsBody?.categoryBitMask = CategoryBitMask.Rubbish
             rubbishPiece.physicsBody?.contactTestBitMask = CategoryBitMask.SeaBin
-            rubbishPiece.physicsBody?.friction = 0.2
-            rubbishPiece.physicsBody?.linearDamping = 0.2
-            rubbishPiece.physicsBody?.restitution = 0.2
+            rubbishPiece.physicsBody?.friction = 0.5
+            rubbishPiece.physicsBody?.linearDamping = 0.5
+            rubbishPiece.physicsBody?.restitution = 0.5
+            rubbishPiece.physicsBody?.velocity = CGVector(dx: CGFloat(arc4random() % 100), dy: CGFloat(arc4random() % 100))
             
             addChild(rubbishPiece)
             
