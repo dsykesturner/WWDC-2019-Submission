@@ -9,6 +9,9 @@
  # 🚮 ❤️ 🐢
  
  ## Instructions
+ 
+ - Note:
+ Please 
   
  1. Tilt your device to move the waste
  2. Move all waste into the sea bins provided

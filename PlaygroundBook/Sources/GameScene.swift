@@ -13,10 +13,10 @@ public class GameScene: SKScene {
     
     public var orientation: UIInterfaceOrientation!
     // Sun
-    var isSunOn:Bool = false
     var addingSolarPannels:Bool = false
     var addingTrees:Bool = false 
     var solarPanels:[SKSpriteNode] = []
+    var sunEmitter:SKEmitterNode?
     // Camera
     var session: AVCaptureSession?
     var captureInput: AVCaptureInput!
@@ -37,10 +37,25 @@ public class GameScene: SKScene {
     var seaBins:[SKSpriteNode] = []
     var rubbish:[SKSpriteNode] = []
     // View
-    var messageView: SKView!
+    var startButton: SKSpriteNode!
+    var startButtonBlock: (() -> Void)?
+    var sunPosition: CGPoint!
+    var fumesEmitter: SKEmitterNode?
+    var cloudsEmitter: SKEmitterNode?
     
     override public func didMove(to view: SKView) {
         super.didMove(to: view)
+        sunPosition = CGPoint(x: view.frame.size.width/3*2+50, y: view.frame.size.height-50)
+        
+//        startButton = UIButton(frame: CGRect(x: view.frame.size.width/2-width/2, y: view.frame.size.height/2-height/2, width: width, height: height))
+//        startButton.setTitle("Start", for: UIControl.State.normal)
+//        startButton.layer.cornerRadius = height/2
+//        startButton.backgroundColor = UIColor.orange
+//        startButton.titleLabel?.textColor = UIColor.black
+//        startButton.addTarget(self, action: #selector(GameScene.startButtonTapped), for: UIControl.Event.touchUpInside)
+        
+        startButton = SKSpriteNode(imageNamed: "StartButton")// SKShapeNode(rectOf: CGSize(width: width, height: height), cornerRadius: width/2)
+        startButton.position = CGPoint(x: size.width/2, y: size.height/2)
     }
     
     public override func willMove(from view: SKView) {
@@ -55,7 +70,9 @@ public class GameScene: SKScene {
         guard let touch = touches.first else { return }
         let touchLocation = touch.location(in: self)
         
-        if addingSolarPannels {
+        if startButton.contains(touchLocation), let block = startButtonBlock {
+            block()
+        } else if addingSolarPannels {
             addSolarPanel(location: touchLocation)
         } else if addingTrees {
             addTree(location: touchLocation)
@@ -66,20 +83,53 @@ public class GameScene: SKScene {
     
     public func setupDirtyCity() {
         
-        addDirtyBackground()
+        addHills()
         addFumes()
     }
     
-    func addDirtyBackground() {
-        let backdrop = SKSpriteNode(imageNamed: "Hills+City")        
-        backdrop.position = CGPoint(x: size.width / 2, y: size.height / 2)
-        backdrop.zPosition = Layers.background
-        addChild(backdrop)
+    public func setupCleanCity() {
         
-        scene?.backgroundColor = UIColor.init(red: 188.0/255.0, green: 201.0/255.0, blue: 224.0/255.0, alpha: 1)
+        addHills()
+        addClouds()
     }
     
-    func addCleanBackground() {
+    func addHills() {
+        let backdrop = SKSpriteNode(imageNamed: "Hills+City")
+        backdrop.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        backdrop.zPosition = Layers.background
+        backdrop.lightingBitMask = 0b0001
+        backdrop.size = size
+        addChild(backdrop)
+        
+        for _ in 0..<3 {
+            let lightNode = SKLightNode()
+            lightNode.position = sunPosition
+            lightNode.categoryBitMask = 0b0001
+            lightNode.lightColor = .white
+            lightNode.falloff = 0
+            addChild(lightNode)
+        }
+        
+        
+    }
+    
+    func addCleanHills() {
+        
+        let backdrop = SKSpriteNode(imageNamed: "Hills-Clean")
+        backdrop.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        backdrop.zPosition = Layers.background
+        backdrop.lightingBitMask = 0b0001
+        addChild(backdrop)
+        
+        for _ in 0..<5 {
+            let lightNode = SKLightNode()
+            lightNode.position = sunPosition
+            lightNode.categoryBitMask = 0b0001
+            lightNode.lightColor = .white
+            lightNode.falloff = 0
+            addChild(lightNode)
+        }
+        
         
     }
     
@@ -95,11 +145,39 @@ public class GameScene: SKScene {
     }
     
     func addFumes() {
-        let fumesEmitter = SKEmitterNode(fileNamed: "Fumes")!
-        fumesEmitter.zPosition = Layers.emitter
-        fumesEmitter.position = CGPoint(x: view!.frame.size.width / 2, y: 0)
-        fumesEmitter.advanceSimulationTime(30)
-        addChild(fumesEmitter)
+        
+        if let cloudsEmitter = cloudsEmitter {
+            cloudsEmitter.particleBirthRate = 0
+            cloudsEmitter.particleLifetime = 1
+        }
+        
+        if fumesEmitter == nil {
+            fumesEmitter = SKEmitterNode(fileNamed: "Fumes")!
+            fumesEmitter!.zPosition = Layers.emitter
+            fumesEmitter!.position = CGPoint(x: view!.frame.size.width / 2, y: view!.frame.size.height/2)
+            fumesEmitter!.advanceSimulationTime(30)
+            addChild(fumesEmitter!)
+        }
+        
+        scene?.backgroundColor = UIColor.init(red: 229.0/255.0, green: 217.0/255.0, blue: 198.0/255.0, alpha: 1)
+    }
+    
+    func addClouds() {
+        
+        if let fumesEmitter = fumesEmitter {
+            fumesEmitter.particleBirthRate = 0
+            fumesEmitter.particleLifetime = 1
+        }
+        
+        if cloudsEmitter == nil {
+            cloudsEmitter = SKEmitterNode(fileNamed: "Clouds")!
+            cloudsEmitter!.zPosition = Layers.emitter
+            cloudsEmitter!.position = CGPoint(x: 0, y: view!.frame.size.height/2)
+            cloudsEmitter!.advanceSimulationTime(30)
+            addChild(cloudsEmitter!)
+        }
+        
+        scene?.backgroundColor = UIColor.init(red: 148.0/255.0, green: 223.0/255.0, blue: 255.0/255.0, alpha: 1)
     }
     
     // MARK: - River
@@ -107,10 +185,17 @@ public class GameScene: SKScene {
     public func setupRiver() {
     
         addRiverBackground()
-        addSeaBins()
-        addRubbish()
-        setupRiverPhysics()
-        setupAccelerometer()
+        
+        addChild(startButton)
+        startButtonBlock = {() -> Void in
+            
+            self.startButton.removeFromParent()
+            
+            self.addSeaBins()
+            self.addRubbish()
+            self.setupRiverPhysics()
+            self.setupAccelerometer()
+        }
     }
    
     func addSeaBins() {
@@ -136,8 +221,7 @@ public class GameScene: SKScene {
             seaBin.physicsBody?.restitution = 0.2
             seaBin.physicsBody?.affectedByGravity = false
             seaBin.physicsBody?.isDynamic = true
-//            seaBin.physicsBody?.mass = CGFloat(Int.max)
-            seaBin.physicsBody?.pinned = true
+            seaBin.physicsBody?.mass = CGFloat(Int.max)
             
             addChild(seaBin)
             
@@ -239,11 +323,17 @@ public class GameScene: SKScene {
     
     func addTree(location: CGPoint) {
         
-        let tree = SKSpriteNode(imageNamed: "Tree")
+        let rand = arc4random() % 3+1
+        
+        let tree = SKSpriteNode(imageNamed: "Tree\(rand)")
         tree.position = location
-        tree.size = CGSize(width: 60, height: 50)
+        tree.size = CGSize(width: 100, height: 75)
         tree.zPosition = Layers.sprite
+        tree.lightingBitMask = 0b0001
+//        tree.shadowCastBitMask = 0b0001
         addChild(tree)
+        
+        addClouds()
     }
     
     // MARK: - Solar Power
@@ -251,14 +341,11 @@ public class GameScene: SKScene {
     public func setupSolarPower() {
         addingSolarPannels = true
         addingTrees = false
-        
-        setupCamera()
-        startCamera()
     }
     
     func addSolarPanel(location: CGPoint) {
         
-        let solarPanel = isSunOn ? SKSpriteNode(imageNamed: "SolarPanel-On") : SKSpriteNode(imageNamed: "SolarPanel-Off")
+        let solarPanel = (sunEmitter != nil) ? SKSpriteNode(imageNamed: "SolarPanel-On") : SKSpriteNode(imageNamed: "SolarPanel-Off")
         solarPanel.position = location
         solarPanel.size = CGSize(width: 50, height: 50)
         solarPanel.zPosition = Layers.sprite
@@ -267,22 +354,37 @@ public class GameScene: SKScene {
         solarPanels.append(solarPanel)
     }
     
+    func addSolarPowerPlant() {
+        
+        addChild(startButton)
+        startButtonBlock = {() -> Void in
+            
+            self.startButton.removeFromParent()
+            
+            self.setupCamera()
+            self.startCamera()
+        }
+        
+    }
+    
     func turnOnSolarPanels() {
         
-        turnOnSun()
-        
-        for solarPanel in solarPanels {
-            solarPanel.texture = SKTexture(imageNamed: "SolarPanel-On")
+        if sunEmitter == nil {
+            turnOnSun()
+            
+            for solarPanel in solarPanels {
+                solarPanel.texture = SKTexture(imageNamed: "SolarPanel-On")
+            }
         }
     }
     
     func turnOnSun() {
 
-        let sunEmitter = SKEmitterNode(fileNamed: "Sun")!
-        sunEmitter.zPosition = Layers.emitter
-        sunEmitter.position = CGPoint(x: view!.frame.size.width / 3, y: view!.frame.size.height-100)
+        sunEmitter = SKEmitterNode(fileNamed: "Sun")!
+        sunEmitter!.zPosition = Layers.sunEmitter
+        sunEmitter!.position = sunPosition
 //        sunEmitter.advanceSimulationTime(
-        addChild(sunEmitter)
+        addChild(sunEmitter!)
     }
     
     func setupCamera() {

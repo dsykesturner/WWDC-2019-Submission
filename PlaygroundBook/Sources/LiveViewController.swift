@@ -9,25 +9,104 @@
 import UIKit
 import PlaygroundSupport
 import SpriteKit
+import AVFoundation
 
 @objc(Book_Sources_LiveViewController)
-public class LiveViewController: UIViewController, PlaygroundLiveViewMessageHandler, PlaygroundLiveViewSafeAreaContainer {
+public class LiveViewController: UIViewController {
     
     public var scene:GameScene!
     var skView:SKView!
     public var airQuality: AirQuality!
     public var waterQuality: WaterQuality!
     
-    @IBOutlet weak var messageView: UIView!
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var messageLabel: UILabel!
-    var messageTappedBlock: (() -> Void)?
+    var player: AVAudioPlayer?
+    
+    public override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        playBackgroundMusic()
+    }
+    
+    public override func viewDidDisappear(_ animated: Bool) {
+        
+//        stopBackgroundMusic()
+    }
+    
+    public override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
+        print("new orientation: \(toInterfaceOrientation.rawValue)")
+        scene.orientation = toInterfaceOrientation
+    }
+    
+    public func setupWith(_ airQuality: String, waterQuality: String) {
+        
+        scene = GameScene(size: view.frame.size)
+        scene.scaleMode = .aspectFill
+        skView = self.view as? SKView
+        skView.presentScene(scene)
+        
+        // NOTE: Deprecated usage here as I had troubles with the current implementation from UIDevice
+        print("new orientation: \(interfaceOrientation.rawValue)")
+        scene.orientation = interfaceOrientation
+    }
+    
+    public func enableSolarPanels() {
+        scene.setupCleanCity()
+        scene.setupSolarPower()
+    }
+    
+    public func enableTrees() {
+        scene.setupDirtyCity()
+        scene.setupTrees()
+    }
+    
+    public func enableRiver() {
+        scene.setupRiver()
+    }
+    
+    func addTree(x: Int, y: Int) {
+        
+        scene.addTree(location: CGPoint(x: x, y: y))
+    }
+    
+    func updatePowerSource(_ powerSource: PowerSource) {
+        
+        if powerSource == PowerSource.coal {
+            
+        } else if powerSource == PowerSource.solarPower {
+            scene.addSolarPowerPlant()
+        }
+    }
+    
+    func playBackgroundMusic() {
+        guard let url = Bundle.main.url(forResource: "DripDropTrack", withExtension: "mp3") else { return }
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
+            
+            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.mp3.rawValue)
+            
+            player?.numberOfLoops = -1
+            player?.play()
+            
+        } catch let error {
+            print(error.localizedDescription)
+        }
+    }
+    
+    func stopBackgroundMusic() {
+        
+        player?.stop()
+    }
+}
+
+extension LiveViewController: PlaygroundLiveViewMessageHandler, PlaygroundLiveViewSafeAreaContainer {
     
     public func liveViewMessageConnectionOpened() {
         // Implement this method to be notified when the live view message connection is opened.
         // The connection will be opened when the process running Contents.swift starts running and listening for messages.
     }
- 
+    
     public func liveViewMessageConnectionClosed() {
         // Implement this method to be notified when the live view message connection is closed.
         // The connection will be closed when the process running Contents.swift exits and is no longer listening for messages.
@@ -58,63 +137,6 @@ public class LiveViewController: UIViewController, PlaygroundLiveViewMessageHand
                 
                 updatePowerSource(PowerSource(rawValue: powerSource)!)
             }
-        }
-    }
-    
-    
-    
-    public override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
-        print("new orientation: \(toInterfaceOrientation.rawValue)")
-        scene.orientation = toInterfaceOrientation
-    }
-    
-    
-    public func setupWith(_ airQuality: String, waterQuality: String) {
-        
-        scene = GameScene(size: view.frame.size)
-        scene.scaleMode = .aspectFill
-        skView = self.view as? SKView
-        skView.presentScene(scene)
-        
-        // NOTE: Deprecated usage here as I had troubles with the current implementation from UIDevice
-        print("new orientation: \(interfaceOrientation.rawValue)")
-        scene.orientation = interfaceOrientation
-    }
-    
-    public func enableSolarPanels() {
-        scene.setupDirtyCity()
-        scene.setupSolarPower()
-    }
-    
-    public func enableTrees() {
-        scene.setupDirtyCity()
-        scene.setupTrees()
-    }
-    
-    public func enableRiver() {
-        scene.setupRiver()
-    }
-    
-    public func showMessage(title: String, message: String, tapped: @escaping () -> Void) {
-        
-        titleLabel.text = title
-        messageLabel.text = message
-        messageView.isHidden = false
-        
-        messageTappedBlock = tapped
-    }
-    
-    func addTree(x: Int, y: Int) {
-        
-        scene.addTree(location: CGPoint(x: x, y: y))
-    }
-    
-    func updatePowerSource(_ powerSource: PowerSource) {
-        
-        if powerSource == PowerSource.coal {
-            
-        } else if powerSource == PowerSource.solarPower {
-            scene.addSolarPanel(location: CGPoint(x: scene.size.width/2, y: scene.size.height/2))
         }
     }
 }

@@ -18,8 +18,8 @@ class AppDelegate: LiveViewHost.AppDelegate {
         // The view or view controller returned from this method will be automatically be shown on screen,
         // as if it were a live view in Swift Playgrounds. You can control how the live view is shown by
         // changing the implementation of the `liveViewConfiguration` property below.
-        let liveView = Book_Sources.sharedLiveVC as! LiveViewController
-        liveView.enableRiver()
+        let liveView = Book_Sources.sharedLiveVC
+        liveView.enableTrees()
         return liveView
     }
 

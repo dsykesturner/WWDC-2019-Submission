@@ -39,13 +39,15 @@ var city = City()
  
  The city needs power, so let's setup solar panels to use the sun's energy to our advantage.
  
- **Did you know:** If the entire world switched to renewable eneregy by 2050, $600 billion would be saved every year in health care costs due to the elimination of risks associated with non-renewable sources. What would you do with that money?
+  * Callout(**Did You Know**):
+    If the entire world switched to renewable eneregy by 2050, $600 billion would be saved every year in health care costs due to the elimination of risks associated with non-renewable sources. What would you do with that money?
  
  # ☀️ ⚡️ 💡
  
  ## Instructions
  
- _(Kind note: This step uses the camera to detect light sensitivity. Please tap "OK" when prompted)_
+ - Note:
+ This will use the camera to detect light sensitivity. Please tap "OK" when prompted.
  
  1. Change the city's power source from `.coal` to `.solarPower`
  2. Tap "Run My Code" to build the solar panels

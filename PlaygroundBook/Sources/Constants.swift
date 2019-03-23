@@ -20,6 +20,7 @@ public struct WaterQuality {
 }
 
 struct Layers {
+    static let sunEmitter: CGFloat      = 0
     static let emitter: CGFloat         = 1
     static let background: CGFloat      = 2
     static let sprite: CGFloat          = 3

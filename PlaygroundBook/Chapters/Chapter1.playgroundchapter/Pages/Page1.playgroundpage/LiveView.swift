@@ -13,10 +13,4 @@ let initialView = sharedLiveVC as! LiveViewController
 
 initialView.setupWith(AirQuality.low, waterQuality: WaterQuality.low)
 
-//initialView.showMessage(title: "t 1", message: "m 1") {
-//    initialView.showMessage(title: "t 2", message: "m 2") {
-//
-//    }
-//}
-
 PlaygroundPage.current.liveView = initialView
