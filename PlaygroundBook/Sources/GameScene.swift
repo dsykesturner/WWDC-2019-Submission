@@ -13,7 +13,6 @@ public class GameScene: SKScene {
     
     public var orientation: UIInterfaceOrientation!
     // Sun
-//    var sunTimer:Timer?
     var isSunOn:Bool = false
     var addingSolarPannels:Bool = false
     var addingTrees:Bool = false 
@@ -40,6 +39,25 @@ public class GameScene: SKScene {
     
     override public func didMove(to view: SKView) {
         super.didMove(to: view)
+    }
+    
+    public override func willMove(from view: SKView) {
+        super.willMove(from: view)
+        
+        motion.stopAccelerometerUpdates()
+    }
+    
+    // MARK: - Interaction Handler
+    
+    override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        let touchLocation = touch.location(in: self)
+        
+        if addingSolarPannels {
+            addSolarPanel(location: touchLocation)
+        } else if addingTrees {
+            addTree(location: touchLocation)
+        }
     }
     
     // MARK: - Scene Setup
@@ -82,33 +100,6 @@ public class GameScene: SKScene {
         addChild(fumesEmitter)
     }
     
-    // MARK: - Interaction Handler
-    
-    override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        guard let touch = touches.first else { return }
-        let touchLocation = touch.location(in: self)
-        
-        if addingSolarPannels {
-            addSolarPanel(location: touchLocation)
-        } else if addingTrees {
-            addTree(location: touchLocation)
-        }
-        
-        
-        
-//        if gem.contains(touchLocation) {
-//            explodeGem()
-//        }
-    }
-    
-    
-//    func explodeGem() {
-//        let emitter = SKEmitterNode(fileNamed: Emitter.gem)!
-//        emitter.position = gem.position
-//        addChild(emitter)
-//        gem.removeFromParent()
-//    }
-    
     // MARK: - River
     
     public func setupRiver() {
@@ -135,14 +126,15 @@ public class GameScene: SKScene {
             seaBin.run(.repeatForever(.rotate(byAngle: CGFloat(Double.pi), duration: 6)))
             
             seaBin.physicsBody = SKPhysicsBody(circleOfRadius: size.width/2)
-            seaBin.physicsBody!.allowsRotation = false
-            seaBin.physicsBody!.categoryBitMask = CategoryBitMask.SeaBin
-            seaBin.physicsBody!.contactTestBitMask = CategoryBitMask.SeaBin
-            seaBin.physicsBody!.friction = 0.2
-            seaBin.physicsBody!.linearDamping = 0.2
-            seaBin.physicsBody!.restitution = 0.2
-            seaBin.physicsBody!.affectedByGravity = false
-            seaBin.physicsBody!.mass = CGFloat(Int.max)
+            seaBin.physicsBody?.allowsRotation = false
+            seaBin.physicsBody?.categoryBitMask = CategoryBitMask.SeaBin
+            seaBin.physicsBody?.contactTestBitMask = CategoryBitMask.Rubbish
+            seaBin.physicsBody?.friction = 0.2
+            seaBin.physicsBody?.linearDamping = 0.2
+            seaBin.physicsBody?.restitution = 0.2
+            seaBin.physicsBody?.affectedByGravity = false
+            seaBin.physicsBody?.isDynamic = true
+            seaBin.physicsBody?.mass = CGFloat(Int.max)
             
             addChild(seaBin)
             
@@ -169,15 +161,15 @@ public class GameScene: SKScene {
             rubbishPiece.size = size
             rubbishPiece.zPosition = Layers.sprite
             rubbishPiece.zRotation = CGFloat.pi / CGFloat(arc4random() % 4 + 1)
-            rubbishPiece.run(.repeatForever(.rotate(byAngle: CGFloat(Double.pi), duration: 4)))
+//            rubbishPiece.run(.repeatForever(.rotate(byAngle: CGFloat(Double.pi), duration: 4)))
             
             rubbishPiece.physicsBody = SKPhysicsBody(circleOfRadius: size.width/2)
-            rubbishPiece.physicsBody!.allowsRotation = false
-            rubbishPiece.physicsBody!.categoryBitMask = CategoryBitMask.Rubbish
-            rubbishPiece.physicsBody!.contactTestBitMask = CategoryBitMask.Rubbish
-            rubbishPiece.physicsBody!.friction = 0.2
-            rubbishPiece.physicsBody!.linearDamping = 0.2
-            rubbishPiece.physicsBody!.restitution = 0.2
+            rubbishPiece.physicsBody?.allowsRotation = true
+            rubbishPiece.physicsBody?.categoryBitMask = CategoryBitMask.Rubbish
+            rubbishPiece.physicsBody?.contactTestBitMask = CategoryBitMask.SeaBin
+            rubbishPiece.physicsBody?.friction = 0.2
+            rubbishPiece.physicsBody?.linearDamping = 0.2
+            rubbishPiece.physicsBody?.restitution = 0.2
             
             addChild(rubbishPiece)
             
@@ -185,14 +177,28 @@ public class GameScene: SKScene {
         }
     }
     
+    func suckRubbish(_ rubbish: SKSpriteNode, intoBin bin: SKSpriteNode) {
+        
+//        rubbish.physicsBody?.affectedByGravity = false
+        rubbish.physicsBody = nil
+        
+        let moveAction = SKAction.move(to: bin.position, duration: 0.5)
+        let sizeAction = SKAction.scaleX(to: 0, y: 0, duration: 0.5)
+        
+        rubbish.run(moveAction)
+        rubbish.run(sizeAction) {
+            rubbish.removeFromParent()
+        }
+    }
+    
     func setupRiverPhysics() {
         
         physicsWorld.contactDelegate = self
-        physicsWorld.gravity = CGVector(dx: 1, dy: 1)
+        physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         
         // Create an invisible barrier around the scene to keep the ball inside
         let sceneBound = SKPhysicsBody(edgeLoopFrom: frame)
-        sceneBound.friction = 0 // TODO: edit this
+        sceneBound.friction = 0
         sceneBound.restitution = 0.2
         physicsBody = sceneBound
     }
@@ -222,7 +228,7 @@ public class GameScene: SKScene {
     
     // MARK: - Trees
     
-   public func setupTrees() {
+    public func setupTrees() {
         addingTrees = true
         addingSolarPannels = false
     }
@@ -373,22 +379,12 @@ extension GameScene: AVCaptureVideoDataOutputSampleBufferDelegate {
 
 extension GameScene: SKPhysicsContactDelegate {
     
-    func didBegin(_ contact: SKPhysicsContact) {
-        // Executed if the ball makes contact with the block.
-        if contact.bodyA.categoryBitMask == CategoryBitMask.Rubbish && contact.bodyB.categoryBitMask == CategoryBitMask.Rubbish {
-            let rubbishA = contact.bodyA.node as! SKSpriteNode
-            let rubbishB = contact.bodyB.node as! SKSpriteNode
-            
-            // Turn the block gray if it hasn't been hit yet.
-//            if block.name == "Block" {
-//                block.color = SKColor.darkGray
-//                block.name = "HalfBlock"
-//            }
-//
-//                // Remove the block from the scene if it has already been hit.
-//            else {
-//                block.removeFromParent()
-//            }
+    public func didBegin(_ contact: SKPhysicsContact) {
+        
+        if contact.bodyA.categoryBitMask == CategoryBitMask.Rubbish && contact.bodyB.categoryBitMask == CategoryBitMask.SeaBin {
+            self.suckRubbish(contact.bodyA.node as! SKSpriteNode, intoBin: contact.bodyB.node as! SKSpriteNode)
+        } else if contact.bodyA.categoryBitMask == CategoryBitMask.SeaBin && contact.bodyB.categoryBitMask == CategoryBitMask.Rubbish {
+            self.suckRubbish(contact.bodyB.node as! SKSpriteNode, intoBin: contact.bodyA.node as! SKSpriteNode)
         }
     }
 }
