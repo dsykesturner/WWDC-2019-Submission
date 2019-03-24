@@ -24,6 +24,8 @@
 		65189CE7224681DB0076503C /* DripDropTrack.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 65189CE5224681DB0076503C /* DripDropTrack.mp3 */; };
 		65189CE922469BF70076503C /* Clouds.sks in Resources */ = {isa = PBXBuildFile; fileRef = 65189CE822469BF70076503C /* Clouds.sks */; };
 		65189CEA22469BF70076503C /* Clouds.sks in Resources */ = {isa = PBXBuildFile; fileRef = 65189CE822469BF70076503C /* Clouds.sks */; };
+		65189CEC2247E4B00076503C /* Zip.wav in Resources */ = {isa = PBXBuildFile; fileRef = 65189CEB2247E4B00076503C /* Zip.wav */; };
+		65189CED2247E4B00076503C /* Zip.wav in Resources */ = {isa = PBXBuildFile; fileRef = 65189CEB2247E4B00076503C /* Zip.wav */; };
 		6598BAF62243B7C4009B4058 /* Sun.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6598BAF52243B7C4009B4058 /* Sun.sks */; };
 		6598BAF72243C1CD009B4058 /* Fumes.sks in Resources */ = {isa = PBXBuildFile; fileRef = 65DDBBB7224259AF00128842 /* Fumes.sks */; };
 		6598BAF82243C1CF009B4058 /* Sun.sks in Resources */ = {isa = PBXBuildFile; fileRef = 6598BAF52243B7C4009B4058 /* Sun.sks */; };
@@ -126,6 +128,7 @@
 		5EF2F9B62054E6F900191409 /* Chapters */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Chapters; sourceTree = "<group>"; };
 		65189CE5224681DB0076503C /* DripDropTrack.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = DripDropTrack.mp3; sourceTree = "<group>"; };
 		65189CE822469BF70076503C /* Clouds.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Clouds.sks; sourceTree = "<group>"; };
+		65189CEB2247E4B00076503C /* Zip.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Zip.wav; sourceTree = "<group>"; };
 		6598BAF52243B7C4009B4058 /* Sun.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Sun.sks; sourceTree = "<group>"; };
 		6598BAFA22450D2D009B4058 /* WaterRipples.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = WaterRipples.sks; sourceTree = "<group>"; };
 		65DDBBB3224257D600128842 /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
@@ -254,6 +257,7 @@
 			isa = PBXGroup;
 			children = (
 				65189CE5224681DB0076503C /* DripDropTrack.mp3 */,
+				65189CEB2247E4B00076503C /* Zip.wav */,
 				5EF2F97E2054B6E400191409 /* ManifestPlist.strings */,
 				65DDBBB7224259AF00128842 /* Fumes.sks */,
 				6598BAF52243B7C4009B4058 /* Sun.sks */,
@@ -391,6 +395,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				65189CE6224681DB0076503C /* DripDropTrack.mp3 in Resources */,
+				65189CEC2247E4B00076503C /* Zip.wav in Resources */,
 				5EF2F97C2054B6E400191409 /* ManifestPlist.strings in Resources */,
 				65DDBBB9224259AF00128842 /* Fumes.sks in Resources */,
 				65189CE922469BF70076503C /* Clouds.sks in Resources */,
@@ -405,6 +410,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				65189CED2247E4B00076503C /* Zip.wav in Resources */,
 				65189CE7224681DB0076503C /* DripDropTrack.mp3 in Resources */,
 				6598BAFC22450D2D009B4058 /* WaterRipples.sks in Resources */,
 				65189CEA22469BF70076503C /* Clouds.sks in Resources */,

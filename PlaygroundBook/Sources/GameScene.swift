@@ -47,10 +47,11 @@ public class GameScene: SKScene {
     var fumesEmitter: SKEmitterNode?
     var cloudsEmitter: SKEmitterNode?
     var messageLabel: SKLabelNode?
+    var soundEffect: AVAudioPlayer?
     
     override public func didMove(to view: SKView) {
         super.didMove(to: view)
-        sunPosition = CGPoint(x: view.frame.size.width/3*2+50, y: view.frame.size.height-50)
+        sunPosition = CGPoint(x: size.width/3*2+50, y: size.height-50)
     }
     
     public override func willMove(from view: SKView) {
@@ -109,11 +110,23 @@ public class GameScene: SKScene {
         
         setupCamera()
         startCamera()
+        
+        PlaygroundPage.current.wantsFullScreenLiveView = true
     }
     
     public func setupRiver() {
         
         addRiverBackground()
+        
+        guard let url = Bundle.main.url(forResource: "Zip", withExtension: "wav") else { return }
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(.playback, mode: .default)
+            try AVAudioSession.sharedInstance().setActive(true)
+            self.soundEffect = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.wav.rawValue)
+        } catch {
+            print(error)
+        }
     }
     
     private func addHillsDirtyBackground() {
@@ -123,7 +136,7 @@ public class GameScene: SKScene {
         }
         
         backdrop = SKSpriteNode(imageNamed: "Hills+City-Dirty")
-        backdrop!.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        backdrop!.position = CGPoint(x: size.width / 2, y: backdrop!.size.height/2)
         backdrop!.zPosition = Layers.background
         backdrop!.lightingBitMask = 0b0001
 //        backdrop!.size = size
@@ -146,10 +159,10 @@ public class GameScene: SKScene {
         }
         
         backdrop = SKSpriteNode(imageNamed: "Hills+City-Clean")
-        backdrop!.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        backdrop!.position = CGPoint(x: size.width / 2, y: backdrop!.size.height/2)
         backdrop!.zPosition = Layers.background
         backdrop!.lightingBitMask = 0b0001
-        backdrop!.size = size
+//        backdrop!.size = size
         addChild(backdrop!)
         
         //        for _ in 0..<3 {
@@ -169,10 +182,10 @@ public class GameScene: SKScene {
         }
         
         backdrop = SKSpriteNode(imageNamed: "Hill1")
-        backdrop!.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        backdrop!.position = CGPoint(x: size.width / 2, y: backdrop!.size.height/2)
         backdrop!.zPosition = Layers.background
         backdrop!.lightingBitMask = 0b0001
-        backdrop!.size = size
+//        backdrop!.size = size
         addChild(backdrop!)
     }
     
@@ -183,10 +196,10 @@ public class GameScene: SKScene {
         }
         
         backdrop = SKSpriteNode(imageNamed: "Hill2+Coal")
-        backdrop!.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        backdrop!.position = CGPoint(x: size.width / 2, y: backdrop!.size.height/2)
         backdrop!.zPosition = Layers.background
         backdrop!.lightingBitMask = 0b0001
-        backdrop!.size = size
+//        backdrop!.size = size
         addChild(backdrop!)
     }
     
@@ -197,10 +210,10 @@ public class GameScene: SKScene {
         }
         
         backdrop = SKSpriteNode(imageNamed: "Hill2+Solar")
-        backdrop!.position = CGPoint(x: size.width / 2, y: size.height / 2)
+        backdrop!.position = CGPoint(x: size.width / 2, y: backdrop!.size.height/2)
         backdrop!.zPosition = Layers.background
         backdrop!.lightingBitMask = 0b0001
-        backdrop!.size = size
+//        backdrop!.size = size
         addChild(backdrop!)
     }
     
@@ -267,11 +280,24 @@ public class GameScene: SKScene {
         }
     }
     
+    private func showMessage(message: String) {
+        
+        if messageLabel != nil {
+            messageLabel!.removeFromParent()
+        }
+        
+        messageLabel = SKLabelNode(text: message)
+        messageLabel!.zPosition = Layers.sprite
+        messageLabel!.fontSize = 40
+        messageLabel!.position = CGPoint(x: frame.size.width/2, y: 100)
+        addChild(messageLabel!)
+    }
+    
     // MARK: - River
    
     public func startRiverGame() {
         
-        PlaygroundPage.current.wantsFullScreenLiveView = true // TODO: test this and put it somewhere more appropriate so the user can read the code first
+        PlaygroundPage.current.wantsFullScreenLiveView = true
         
         self.addSeaBins()
         self.addRubbish()
@@ -384,12 +410,17 @@ public class GameScene: SKScene {
             self.rubbishRemaining -= 1
             if self.rubbishRemaining == 0 {
                 // TODO: game won! show end game message
+                self.showMessage(message: "That's all the rubbish, nice work!")
             }
             
             // Randomly have fish swim past
             if arc4random() % 2 == 0 {
                 self.addFish()
             }
+        }
+        
+        if let soundEffect = soundEffect {
+            soundEffect.play()
         }
     }
     
@@ -463,6 +494,8 @@ public class GameScene: SKScene {
         tree.run(rise)
         
         addClouds()
+        
+        showMessage(message: "Those are some nice looking trees!")
     }
     
     // MARK: - Power
@@ -472,23 +505,15 @@ public class GameScene: SKScene {
         addingTrees = false
     }
     
-    private func turnOnSolarPanels() {
-        
-        if sunEmitter == nil {
-            turnOnSun()
-            
-            for solarPanel in solarPanels {
-                solarPanel.texture = SKTexture(imageNamed: "SolarPanel-On")
-            }
-        }
-    }
-    
-    private func turnOnSun() {
+    private func addSun() {
 
+        if sunEmitter != nil {
+            return
+        }
+        
         sunEmitter = SKEmitterNode(fileNamed: "Sun")!
         sunEmitter!.zPosition = Layers.sunEmitter
         sunEmitter!.position = sunPosition
-//        sunEmitter.advanceSimulationTime(
         addChild(sunEmitter!)
     }
     
@@ -544,29 +569,31 @@ public class GameScene: SKScene {
         
         calculateBrightnessTimer = Timer(fire: Date(), interval: 1.5, repeats: true, block: { (timer) in
             let averageBrightness = self.totalBrightness / Float(self.brightnessCount)
-//            if self.calibratedBrightness == nil {
-//                self.calibratedBrightness = averageBrightness
-//            } else if let calibratedBrightness = self.calibratedBrightness, averageBrightness > calibratedBrightness {
+            print(averageBrightness)
+            
+            if self.calibratedBrightness == nil && averageBrightness > 0.0 {
+                self.calibratedBrightness = averageBrightness
+            } else if let calibratedBrightness = self.calibratedBrightness, averageBrightness > calibratedBrightness*1.2 {
+                self.stopCamera()
+                self.addSun()
+            }
+            print(averageBrightness)
+            
+//            if averageBrightness > 0 && averageBrightness > self.prevAveBrightness*1.3 && self.prevAveBrightness != 0 {
+//                print("triggered! A")
 //                self.stopCamera()
 //                self.turnOnSolarPanels()
 //            }
-//            print(averageBrightness)
-            
-            if averageBrightness > 0 && averageBrightness > self.prevAveBrightness*1.3 && self.prevAveBrightness != 0 {
-                print("triggered! A")
-                self.stopCamera()
-                self.turnOnSolarPanels()
-            }
-            else if averageBrightness > 0 && averageBrightness > self.prevAveBrightness2*1.1 && averageBrightness > self.prevAveBrightness*1.1 && self.prevAveBrightness2 != 0 {
-                print("triggered! B")
-                self.stopCamera()
-                self.turnOnSolarPanels()
-            }
-
-            self.prevAveBrightness2 = self.prevAveBrightness
-            self.prevAveBrightness = averageBrightness
-            self.totalBrightness = 0
-            self.brightnessCount = 0
+//            else if averageBrightness > 0 && averageBrightness > self.prevAveBrightness2*1.1 && averageBrightness > self.prevAveBrightness*1.1 && self.prevAveBrightness2 != 0 {
+//                print("triggered! B")
+//                self.stopCamera()
+//                self.turnOnSolarPanels()
+//            }
+//
+//            self.prevAveBrightness2 = self.prevAveBrightness
+//            self.prevAveBrightness = averageBrightness
+//            self.totalBrightness = 0
+//            self.brightnessCount = 0
         })
         RunLoop.current.add(self.calculateBrightnessTimer!, forMode: .default)
     }

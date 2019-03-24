@@ -1,7 +1,7 @@
 /*:
  # Clean Cities
  
- This Playground is about different ways of keeping our cities enviromentally clean, and the impact this results in. Here is a beautiful city with amazing potential, but first some work has to be done.
+ This Playground is about different ways of keeping our cities enviromentally clean, and the impact this results in. Here is a city with amazing potential, but first some work has to be done.
  
  Whether it's:
  -  planting some 🌳

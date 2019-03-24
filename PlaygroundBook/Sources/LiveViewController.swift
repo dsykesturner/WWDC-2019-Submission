@@ -79,7 +79,7 @@ public class LiveViewController: UIViewController, PlaygroundLiveViewSafeAreaCon
         scene.addTree(location: CGPoint(x: x, y: y))
     }
     
-    func updatePowerSource(_ powerSource: PowerSource) {
+    public func updatePowerSource(_ powerSource: PowerSource) {
         if powerSource == PowerSource.coal {
             scene.setupCoalHill()
         } else if powerSource == PowerSource.solarPower {

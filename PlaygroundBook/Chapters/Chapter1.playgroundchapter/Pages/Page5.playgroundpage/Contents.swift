@@ -1,17 +1,17 @@
 /*:
  # Congratulations!
  
- You've done a wonderful job cleaning up this city. I hope you'vee 
+ You've done a wonderful job cleaning up this city.
  
- This Playground is about different ways of keeping our cities enviromentally clean, and the impact this results in. Here is a beautiful city with amazing potential, but first some work has to be done.
+ If you would like to go for another lap, just reset this book.
  
- Whether it's:
- -  planting some 🌳
- -  using renewable energy 🌤️
- -  or keeping plastic from entering the ocean 🐠
+ If not, go outside and see what you can clean up in the real world. Don't wait for tomorrow!
+
  
- we all have a responsibility to do our part!
+ - Author: Daniel Sykes-Turner
  
- * Experiment:
- Continue through the next three pages to make this city environmentally friendly
+ * Callout(**Did You Know**):
+ - Background music by shortiefoeva2 from https://freesound.org/people/shortiefoeva2/sounds/405219/
+ - Sea bin sound by uEffects from https://freesound.org/people/uEffects/sounds/324659/
+ 
  */

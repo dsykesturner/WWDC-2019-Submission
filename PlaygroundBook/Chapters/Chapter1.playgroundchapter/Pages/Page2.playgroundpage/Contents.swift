@@ -44,4 +44,8 @@ func addTree(x: Int, y: Int) {
 
 // For example:
 addTree(x: 500, y: 250)
+// Use loops to add multiple trees
+for i in 0..<5 {
+    addTree(x: 500 + i*50, y: 350)
+}
 // Add more trees below
