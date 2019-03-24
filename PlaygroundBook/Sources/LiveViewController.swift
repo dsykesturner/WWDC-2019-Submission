@@ -32,7 +32,7 @@ public class LiveViewController: UIViewController, PlaygroundLiveViewSafeAreaCon
     }
     
     public override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
-        print("new orientation: \(toInterfaceOrientation.rawValue)")
+        // The orientation must be updated for the accelerometer readings to be correct
         scene.orientation = toInterfaceOrientation
     }
     
@@ -40,17 +40,19 @@ public class LiveViewController: UIViewController, PlaygroundLiveViewSafeAreaCon
     
     public func setupScene() {
         
+        // Setup the basic scene. This won't have any UI elements until we add them using the functions below
         scene = GameScene(size: view.frame.size)
         scene.scaleMode = .aspectFill
         skView = self.view as? SKView
         skView.presentScene(scene)
         
         // NOTE: Deprecated usage here as I had troubles with the current implementation from UIDevice
-        print("new orientation: \(interfaceOrientation.rawValue)")
         scene.orientation = interfaceOrientation
         
         PlaygroundPage.current.wantsFullScreenLiveView = false
     }
+    
+    // MARK: Scene configurations
     
     public func setupForDirtyCity() {
         scene.setupDirtyCity()
@@ -72,7 +74,7 @@ public class LiveViewController: UIViewController, PlaygroundLiveViewSafeAreaCon
         scene.setupRiver()
     }
     
-    // MARK: Functions to be called from the code editor
+    // MARK: Functions to be called from the code editor (LiveView.swift)
     
     func addTree(x: Int, y: Int) {
         scene.addTree(location: CGPoint(x: x, y: y))
@@ -128,10 +130,8 @@ extension LiveViewController: PlaygroundLiveViewMessageHandler {
     }
     
     public func receive(_ message: PlaygroundValue) {
-        // Implement this method to receive messages sent from the process running Contents.swift.
-        // This method is *required* by the PlaygroundLiveViewMessageHandler protocol.
-        // Use this method to decode any messages sent as PlaygroundValue values and respond accordingly.
         
+        // Interpret where the type of message and call the correct function
         if case .dictionary(let dict) = message {
             
             guard let type_val = dict["type"] else { return }

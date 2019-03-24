@@ -12,13 +12,14 @@ import CoreMotion
 
 public class GameScene: SKScene {
     
+    // Global
     public var orientation: UIInterfaceOrientation!
     // Sun
     var sunEmitter:SKEmitterNode?
     // Coal Plant
     var coalPowerStation:SKSpriteNode?
     var coalPowerStationFumes:SKEmitterNode?
-    // Camera
+    // Camera (used for brightness detection)
     var session: AVCaptureSession?
     var captureInput: AVCaptureInput!
     var videoOutput: AVCaptureVideoDataOutput!
@@ -30,8 +31,6 @@ public class GameScene: SKScene {
     }
     var totalBrightness: Float = 0.0
     var brightnessCount: Int = 0
-    var prevAveBrightness: Float = 0.0
-    var prevAveBrightness2: Float = 0.0
     var calculateBrightnessTimer: Timer?
     var calibratedBrightness: Float?
     // River
@@ -83,7 +82,8 @@ public class GameScene: SKScene {
     public func setupTreeHill() {
         
         addHillsTreesBackground()
-        addFumes()
+        
+        scene?.backgroundColor = UIColor.init(red: 157.0/255.0, green: 197.0/255.0, blue: 60.0/255.0, alpha: 1)
     }
     
     public func setupCoalHill() {
@@ -130,17 +130,7 @@ public class GameScene: SKScene {
         backdrop!.position = CGPoint(x: size.width / 2, y: backdrop!.size.height/2)
         backdrop!.zPosition = Layers.background
         backdrop!.lightingBitMask = 0b0001
-//        backdrop!.size = size
         addChild(backdrop!)
-        
-//        for _ in 0..<3 {
-//            let lightNode = SKLightNode()
-//            lightNode.position = sunPosition
-//            lightNode.categoryBitMask = 0b0001
-//            lightNode.lightColor = .white
-//            lightNode.falloff = 0
-//            addChild(lightNode)
-//        }
     }
     
     private func addHillsCleanBackground() {
@@ -153,17 +143,7 @@ public class GameScene: SKScene {
         backdrop!.position = CGPoint(x: size.width / 2, y: backdrop!.size.height/2)
         backdrop!.zPosition = Layers.background
         backdrop!.lightingBitMask = 0b0001
-//        backdrop!.size = size
         addChild(backdrop!)
-        
-        //        for _ in 0..<3 {
-        //            let lightNode = SKLightNode()
-        //            lightNode.position = sunPosition
-        //            lightNode.categoryBitMask = 0b0001
-        //            lightNode.lightColor = .white
-        //            lightNode.falloff = 0
-        //            addChild(lightNode)
-        //        }
     }
     
     private func addHillsTreesBackground() {
@@ -176,7 +156,6 @@ public class GameScene: SKScene {
         backdrop!.position = CGPoint(x: size.width / 2, y: backdrop!.size.height/2)
         backdrop!.zPosition = Layers.background
         backdrop!.lightingBitMask = 0b0001
-//        backdrop!.size = size
         addChild(backdrop!)
     }
     
@@ -190,7 +169,6 @@ public class GameScene: SKScene {
         backdrop!.position = CGPoint(x: size.width / 2, y: backdrop!.size.height/2)
         backdrop!.zPosition = Layers.background
         backdrop!.lightingBitMask = 0b0001
-//        backdrop!.size = size
         addChild(backdrop!)
     }
     
@@ -204,7 +182,6 @@ public class GameScene: SKScene {
         backdrop!.position = CGPoint(x: size.width / 2, y: backdrop!.size.height/2)
         backdrop!.zPosition = Layers.background
         backdrop!.lightingBitMask = 0b0001
-//        backdrop!.size = size
         addChild(backdrop!)
     }
     
@@ -523,8 +500,6 @@ public class GameScene: SKScene {
         let rise = SKAction.moveBy(x: 0, y: height/2, duration: 0.3)
         tree.run(rise)
         
-        addClouds()
-        
         showMessage(message: "Those are some nice looking trees!")
     }
     
@@ -596,7 +571,6 @@ public class GameScene: SKScene {
         
         calculateBrightnessTimer = Timer(fire: Date(), interval: 1.5, repeats: true, block: { (timer) in
             let averageBrightness = self.totalBrightness / Float(self.brightnessCount)
-            print(averageBrightness)
             
             if self.calibratedBrightness == nil && averageBrightness > 0.0 {
                 self.calibratedBrightness = averageBrightness
@@ -604,30 +578,12 @@ public class GameScene: SKScene {
                 self.stopCamera()
                 self.addSun()
             }
-            print(averageBrightness)
-            
-//            if averageBrightness > 0 && averageBrightness > self.prevAveBrightness*1.3 && self.prevAveBrightness != 0 {
-//                print("triggered! A")
-//                self.stopCamera()
-//                self.turnOnSolarPanels()
-//            }
-//            else if averageBrightness > 0 && averageBrightness > self.prevAveBrightness2*1.1 && averageBrightness > self.prevAveBrightness*1.1 && self.prevAveBrightness2 != 0 {
-//                print("triggered! B")
-//                self.stopCamera()
-//                self.turnOnSolarPanels()
-//            }
-//
-//            self.prevAveBrightness2 = self.prevAveBrightness
-//            self.prevAveBrightness = averageBrightness
-//            self.totalBrightness = 0
-//            self.brightnessCount = 0
         })
         RunLoop.current.add(self.calculateBrightnessTimer!, forMode: .default)
     }
     
     private func stopCamera() {
         guard let session = session else {
-            // handle session not allowed
             return
         }
         session.stopRunning()
@@ -637,6 +593,8 @@ public class GameScene: SKScene {
 
 extension GameScene: AVCaptureVideoDataOutputSampleBufferDelegate {
     
+    // Read the captured output from the camera to detect a brightness level of the room.
+    // I couldn't find a proper API for the ambient light sensor which should have been a better option...
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         
         let metadataDict:CFDictionary = CMCopyDictionaryOfAttachments(allocator: nil, target: sampleBuffer, attachmentMode: kCMAttachmentMode_ShouldPropagate)!
@@ -650,6 +608,7 @@ extension GameScene: AVCaptureVideoDataOutputSampleBufferDelegate {
 
 extension GameScene: SKPhysicsContactDelegate {
     
+    // Handle various sprites hitting each other
     public func didBegin(_ contact: SKPhysicsContact) {
         
         if contact.bodyA.categoryBitMask == CategoryBitMask.Rubbish && contact.bodyB.categoryBitMask == CategoryBitMask.SeaBin {

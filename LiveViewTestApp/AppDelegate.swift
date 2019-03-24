@@ -21,8 +21,9 @@ class AppDelegate: LiveViewHost.AppDelegate {
         let liveView = Book_Sources.sharedLiveVC
 //        liveView.setupForSolarPower()
 //        liveView.updatePowerSource(PowerSource.solarPower)
-        liveView.setupForRiver()
-        liveView.startGame()
+//        liveView.setupForRiver()
+//        liveView.startGame()
+        liveView.setupForTrees()
         return liveView
     }
 
