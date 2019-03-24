@@ -39,10 +39,10 @@ var city = City()
  
  Next we need to find a more renewable energy source.
  
- This city is using coal as its main power source, but it's producing a lot of harmful emissions. Let's setup solar power plant instead to use the sun's energy to our advantage.
+ This city is using coal as its main power source, but it's producing a lot of harmful emissions. Lets setup solar power plant instead to use the sun's energy to our advantage.
  
   * Callout(**Did You Know**):
-    If the entire world switched to renewable eneregy by 2050, $600 billion would be saved every year in health care costs due to the elimination of risks associated with non-renewable sources. What would you do with that money?
+    If the entire world switched to renewable energy by 2050, $600 billion would be saved every year in health care costs due to the elimination of risks associated with non-renewable sources. What would you do with that money?
  
  # ☀️ ⚡️ 💡
  

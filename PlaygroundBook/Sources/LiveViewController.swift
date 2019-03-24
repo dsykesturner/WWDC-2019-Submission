@@ -1,9 +1,8 @@
 //
-//  See LICENSE folder for this template’s licensing information.
+//  LiveViewController.swift
+//  Book_Sources
 //
-//  Abstract:
-//  An auxiliary source file which is part of the book-level auxiliary sources.
-//  Provides the implementation of the "always-on" live view.
+//  Created by Daniel Sykes-Turner on 20/3/19.
 //
 
 import UIKit
@@ -29,7 +28,7 @@ public class LiveViewController: UIViewController, PlaygroundLiveViewSafeAreaCon
     
     public override func viewDidDisappear(_ animated: Bool) {
         
-//        stopBackgroundMusic()
+        stopBackgroundMusic()
     }
     
     public override func willRotate(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {

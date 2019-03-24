@@ -1,5 +1,5 @@
 /*:
- # Congratulations!
+ # Congratulations! 🌏
  
  You've done a wonderful job cleaning up this city.
  

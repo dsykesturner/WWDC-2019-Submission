@@ -1,8 +1,8 @@
 //
-//  See LICENSE folder for this template’s licensing information.
+//  LiveViewSupport.swift
+//  Book_Sources
 //
-//  Abstract:
-//  Provides supporting functions for setting up a live view.
+//  Created by Daniel Sykes-Turner on 20/3/19.
 //
 
 import UIKit

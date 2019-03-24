@@ -25,7 +25,7 @@ listener.startGame()
 /*:
  # Step 3: Sea Bins
  
- Lastly, let's make sure that any plactic that reaches the water doesn't end up floating out to the ocean.
+ Lastly, let's make sure that any plastic that reaches the water doesn't end up floating out to the ocean.
  
  Sea bins clean up plastics and other harmful waste from the water. Surrounding waste flows into the bin while water is pumped out the bottom trapping any waste in a filter.
  
@@ -41,5 +41,5 @@ listener.startGame()
  
  1. Tap "Run My Code" to start cleaning
  2. Tilt your device to move the rubbish into the sea bins provided
- 3. Watch out! Don't let the fish hit any rubbish.
+ 3. But watch out! Don't let the fish hit any rubbish.
  */

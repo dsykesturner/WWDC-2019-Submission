@@ -14,9 +14,6 @@ public class GameScene: SKScene {
     
     public var orientation: UIInterfaceOrientation!
     // Sun
-    var addingSolarPannels:Bool = false
-    var addingTrees:Bool = false 
-    var solarPanels:[SKSpriteNode] = []
     var sunEmitter:SKEmitterNode?
     // Coal Plant
     var coalPowerStation:SKSpriteNode?
@@ -66,19 +63,6 @@ public class GameScene: SKScene {
         
         motion?.stopAccelerometerUpdates()
     }
-    
-    // MARK: - Interaction Handler
-    
-//    override public func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        guard let touch = touches.first else { return }
-//        let touchLocation = touch.location(in: self)
-//
-//        if addingSolarPannels {
-//            addSolarPanel(location: touchLocation)
-//        } else if addingTrees {
-//            addTree(location: touchLocation)
-//        }
-//    }
     
     // MARK: - Scene Setup
     
@@ -546,11 +530,6 @@ public class GameScene: SKScene {
     
     // MARK: - Power
     
-    public func setupSolarPower() {
-        addingSolarPannels = true
-        addingTrees = false
-    }
-    
     private func addSun() {
 
         if sunEmitter != nil {
@@ -561,6 +540,8 @@ public class GameScene: SKScene {
         sunEmitter!.zPosition = Layers.sunEmitter
         sunEmitter!.position = sunPosition
         addChild(sunEmitter!)
+        
+        showMessage(message: "You got the sun running, nice work!")
     }
     
     private func setupCamera() {
