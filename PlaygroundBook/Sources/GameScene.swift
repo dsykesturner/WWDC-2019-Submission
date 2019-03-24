@@ -41,6 +41,13 @@ public class GameScene: SKScene {
     var motion:CMMotionManager?
     var seaBins:[SKSpriteNode] = []
     var rubbishRemaining = 0
+    var score = 0 {
+        didSet {
+            showMessage(message: "Score: \(score)")
+        }
+    }
+    var fish:[SKLabelNode] = []
+    var rubbish:[SKSpriteNode] = []
     // View
     var backdrop: SKSpriteNode?
     var sunPosition: CGPoint!
@@ -299,6 +306,16 @@ public class GameScene: SKScene {
         
         PlaygroundPage.current.wantsFullScreenLiveView = true
         
+        for f in self.fish {
+            f.removeFromParent()
+        }
+        for r in self.rubbish {
+            r.removeFromParent()
+        }
+        rubbishRemaining = 0
+        
+        score = 0
+        
         self.addSeaBins()
         self.addRubbish()
         self.setupRiverPhysics()
@@ -365,13 +382,14 @@ public class GameScene: SKScene {
             rubbishPiece.physicsBody?.velocity = CGVector(dx: CGFloat(arc4random() % 100), dy: CGFloat(arc4random() % 100))
             
             addChild(rubbishPiece)
+            self.rubbish.append(rubbishPiece)
         }
     }
     
     private func addFish() {
         
         var fish:SKLabelNode
-        let fishType = arc4random() % 4
+        let fishType = arc4random() % 7
         switch fishType {
         case 0:
             fish = SKLabelNode(text: "🐟")
@@ -381,19 +399,34 @@ public class GameScene: SKScene {
             fish = SKLabelNode(text: "🐡")
         case 3:
             fish = SKLabelNode(text: "🐳")
+        case 4:
+            fish = SKLabelNode(text: "🐬")
+        case 5:
+            fish = SKLabelNode(text: "🐙")
+        case 6:
+            fish = SKLabelNode(text: "🦞")
+        case 7:
+            fish = SKLabelNode(text: "🐢")
         default:
             return
         }
         
         fish.zPosition = Layers.sprite
         fish.fontSize = 50
-        fish.position = CGPoint(x: frame.size.width+50, y: frame.size.height * (CGFloat(arc4random() % 100) / 100))
-        addChild(fish)
+        fish.position = CGPoint(x: frame.size.width-50, y: frame.size.height * (CGFloat(arc4random() % 100) / 100))
         
-        let action = SKAction.moveTo(x: -50, duration: Double(arc4random() % 2 + 6))
-        fish.run(action) {
-            fish.removeFromParent()
-        }
+        fish.physicsBody = SKPhysicsBody(circleOfRadius: fish.frame.size.width/2)
+        fish.physicsBody?.allowsRotation = true
+        fish.physicsBody?.categoryBitMask = CategoryBitMask.Fish
+        fish.physicsBody?.contactTestBitMask = CategoryBitMask.Rubbish
+        fish.physicsBody?.friction = 0.2
+        fish.physicsBody?.linearDamping = 0
+        fish.physicsBody?.restitution = 0
+        fish.physicsBody?.affectedByGravity = true
+        fish.physicsBody?.velocity = CGVector(dx: CGFloat(arc4random() % 100), dy: CGFloat(arc4random() % 10))
+        
+        addChild(fish)
+        self.fish.append(fish)
     }
     
     private func suckRubbish(_ rubbish: SKSpriteNode, intoBin bin: SKSpriteNode) {
@@ -407,6 +440,7 @@ public class GameScene: SKScene {
         rubbish.run(sizeAction) {
             rubbish.removeFromParent()
             
+            self.score += 1
             self.rubbishRemaining -= 1
             if self.rubbishRemaining == 0 {
                 // TODO: game won! show end game message
@@ -424,6 +458,18 @@ public class GameScene: SKScene {
         }
     }
     
+    private func removeFish(_ fish: SKLabelNode) {
+        
+        fish.physicsBody = nil
+        
+        let sizeAction = SKAction.scaleX(to: 0, y: 0, duration: 0.5)
+        
+        fish.run(sizeAction) {
+            fish.removeFromParent()
+            self.score -= 1
+        }
+    }
+    
     private func setupRiverPhysics() {
         
         physicsWorld.contactDelegate = self
@@ -432,9 +478,9 @@ public class GameScene: SKScene {
         if physicsBody == nil {
             // Create an invisible barrier around the scene to keep the ball inside
             let sceneBound = SKPhysicsBody(edgeLoopFrom: frame)
-            sceneBound.friction = 0.2
-            sceneBound.restitution = 0.5
-            sceneBound.linearDamping = 0.7
+            sceneBound.friction = 0
+            sceneBound.restitution = 0
+            sceneBound.linearDamping = 0.4
             physicsBody = sceneBound
         }
     }
@@ -629,6 +675,10 @@ extension GameScene: SKPhysicsContactDelegate {
             self.suckRubbish(contact.bodyA.node as! SKSpriteNode, intoBin: contact.bodyB.node as! SKSpriteNode)
         } else if contact.bodyA.categoryBitMask == CategoryBitMask.SeaBin && contact.bodyB.categoryBitMask == CategoryBitMask.Rubbish {
             self.suckRubbish(contact.bodyB.node as! SKSpriteNode, intoBin: contact.bodyA.node as! SKSpriteNode)
+        } else if contact.bodyA.categoryBitMask == CategoryBitMask.Fish && contact.bodyB.categoryBitMask == CategoryBitMask.Rubbish {
+            self.removeFish(contact.bodyA.node as! SKLabelNode)
+        } else if contact.bodyA.categoryBitMask == CategoryBitMask.Rubbish && contact.bodyB.categoryBitMask == CategoryBitMask.Fish {
+            self.removeFish(contact.bodyB.node as! SKLabelNode)
         }
     }
 }

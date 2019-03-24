@@ -29,6 +29,7 @@ struct Layers {
 struct CategoryBitMask {
     static let SeaBin: UInt32           = 0b1 << 0
     static let Rubbish: UInt32          = 0b1 << 1
+    static let Fish: UInt32             = 0b1 << 2
 }
 
 public enum PowerSource: Int {

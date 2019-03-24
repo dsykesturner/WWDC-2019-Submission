@@ -40,5 +40,6 @@ listener.startGame()
  Turn on rotate-lock here to avoid your screen from rotating when tilting your device
  
  1. Tap "Run My Code" to start cleaning
- 2. Tilt your device to move the waste into the sea bins provided
+ 2. Tilt your device to move the rubbish into the sea bins provided
+ 3. Watch out! Don't let the fish hit any rubbish.
  */
