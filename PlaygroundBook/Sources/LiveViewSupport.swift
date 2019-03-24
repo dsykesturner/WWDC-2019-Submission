@@ -8,7 +8,7 @@
 import UIKit
 import PlaygroundSupport
 
-var currentLiveViewController: LiveViewController!
+var currentLiveViewController: LiveViewController = instantiateLiveView()
 
 /// Instantiates a new instance of a live view.
 ///
@@ -23,14 +23,13 @@ func instantiateLiveView() -> LiveViewController {
     guard let liveViewController = viewController as? LiveViewController else {
         fatalError("LiveView.storyboard's initial scene is not a LiveViewController; please either update the storyboard or this function")
     }
-    liveViewController.setupWith(AirQuality.low, waterQuality: WaterQuality.low)
+    liveViewController.setupScene()
     
     return liveViewController
 }
 
 public var sharedLiveVC: LiveViewController {
     get {
-        currentLiveViewController = instantiateLiveView()
         return currentLiveViewController
     }    
 }

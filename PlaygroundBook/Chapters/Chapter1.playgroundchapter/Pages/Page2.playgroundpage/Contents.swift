@@ -27,9 +27,9 @@ func addTree(x: Int, y: Int) {
 //#-code-completion(everything, hide)
 //#-code-completion(identifier, show, addTree(x:y:))
 /*:
- # Phase 1: Planting Trees
+ # Step 1: Planting Trees
  
- First let's start by planting new trees.
+ Let's start by planting new trees to replace those which have been cut down.
  
  * Callout(**Did You Know**):
  Forests help clean our water, filter our air, and also provide food, medicine, and fuel when needed! Plant one in your backyard to make your difference.
@@ -42,4 +42,6 @@ func addTree(x: Int, y: Int) {
  2. Tap "Run My Code" to begin planting trees
  */
 
+// For example:
 addTree(x: 500, y: 250)
+// Add more trees below

@@ -12,7 +12,7 @@ import SpriteKit
 import AVFoundation
 
 @objc(Book_Sources_LiveViewController)
-public class LiveViewController: UIViewController {
+public class LiveViewController: UIViewController, PlaygroundLiveViewSafeAreaContainer {
     
     public var scene:GameScene!
     var skView:SKView!
@@ -37,7 +37,9 @@ public class LiveViewController: UIViewController {
         scene.orientation = toInterfaceOrientation
     }
     
-    public func setupWith(_ airQuality: String, waterQuality: String) {
+    // MARK: Scene setup functions
+    
+    public func setupScene() {
         
         scene = GameScene(size: view.frame.size)
         scene.scaleMode = .aspectFill
@@ -47,35 +49,49 @@ public class LiveViewController: UIViewController {
         // NOTE: Deprecated usage here as I had troubles with the current implementation from UIDevice
         print("new orientation: \(interfaceOrientation.rawValue)")
         scene.orientation = interfaceOrientation
+        
+        PlaygroundPage.current.wantsFullScreenLiveView = false
     }
     
-    public func enableSolarPanels() {
-        scene.setupCleanCity()
-        scene.setupSolarPower()
-    }
-    
-    public func enableTrees() {
+    public func setupForDirtyCity() {
         scene.setupDirtyCity()
-        scene.setupTrees()
     }
     
-    public func enableRiver() {
+    public func setupForCleanCity() {
+        scene.setupCleanCity()
+    }
+    
+    public func setupForSolarPower() {
+        scene.setupCoalHill()
+    }
+    
+    public func setupForTrees() {
+        scene.setupTreeHill()
+    }
+    
+    public func setupForRiver() {
         scene.setupRiver()
     }
     
+    // MARK: Functions to be called from the code editor
+    
     func addTree(x: Int, y: Int) {
-        
         scene.addTree(location: CGPoint(x: x, y: y))
     }
     
     func updatePowerSource(_ powerSource: PowerSource) {
-        
         if powerSource == PowerSource.coal {
-            
+            scene.setupCoalHill()
         } else if powerSource == PowerSource.solarPower {
-            scene.addSolarPowerPlant()
+            scene.setupSolarPowerHill()
         }
     }
+    
+    public func startGame() {
+        scene.startRiverGame()
+    }
+    
+    // MARK: Background audio functions
     
     func playBackgroundMusic() {
         guard let url = Bundle.main.url(forResource: "DripDropTrack", withExtension: "mp3") else { return }
@@ -95,12 +111,11 @@ public class LiveViewController: UIViewController {
     }
     
     func stopBackgroundMusic() {
-        
         player?.stop()
     }
 }
 
-extension LiveViewController: PlaygroundLiveViewMessageHandler, PlaygroundLiveViewSafeAreaContainer {
+extension LiveViewController: PlaygroundLiveViewMessageHandler {
     
     public func liveViewMessageConnectionOpened() {
         // Implement this method to be notified when the live view message connection is opened.
@@ -124,7 +139,7 @@ extension LiveViewController: PlaygroundLiveViewMessageHandler, PlaygroundLiveVi
             guard case .string(let type) = type_val else { return }
             
             
-            if type == "treeCoordinates" {
+            if type == "treeCoordinate" {
                 guard let x_val = dict["x"] else { return }
                 guard let y_val = dict["y"] else { return }
                 
@@ -136,6 +151,8 @@ extension LiveViewController: PlaygroundLiveViewMessageHandler, PlaygroundLiveVi
                 guard case .integer(let powerSource) = powerSource_val else { return }
                 
                 updatePowerSource(PowerSource(rawValue: powerSource)!)
+            } else if type == "startGame" {
+                startGame()
             }
         }
     }

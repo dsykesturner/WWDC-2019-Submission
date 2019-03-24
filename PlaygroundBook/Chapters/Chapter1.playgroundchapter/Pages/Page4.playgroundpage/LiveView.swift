@@ -10,6 +10,5 @@ import PlaygroundSupport
 
 // Instantiate a new instance of the live view from the book's auxiliary sources and pass it to PlaygroundSupport.
 let initialView = sharedLiveVC as! LiveViewController
-initialView.setupWith(AirQuality.low, waterQuality: WaterQuality.low)
-initialView.enableRiver()
+initialView.setupForRiver()
 PlaygroundPage.current.liveView = initialView
